@@ -1,0 +1,550 @@
+{
+  "name": "Bolsa de Santiago & Indicadores Económicos - Scraper y DB",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 5
+            }
+          ]
+        }
+      },
+      "id": "e441cb17-8178-43ea-912b-23214878b401",
+      "name": "Trigger Cada 5 Minutos",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        220,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "7b088e52-19e4-4d1a-a921-6a1ea0367bfb",
+      "name": "Test Manual",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        220,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Verificar si estamos en horario bursátil (Lunes a Viernes de 08:30 a 16:30 hrs Santiago)\n// Si es ejecución manual (Test Manual), siempre permitimos continuar.\n\nconst isManual = $input.first().json?.isManual ?? false;\n\n// Obtenemos la hora en zona horaria America/Santiago\nconst now = new Date();\nconst santiagoTimeString = now.toLocaleString(\"en-US\", { timeZone: \"America/Santiago\", hour12: false });\nconst santiagoDate = new Date(santiagoTimeString);\n\nconst dayOfWeek = santiagoDate.getDay(); // 0 = Domingo, 1 = Lunes, ..., 5 = Viernes, 6 = Sábado\nconst hours = santiagoDate.getHours();\nconst minutes = santiagoDate.getMinutes();\nconst currentTimeMinutes = hours * 60 + minutes;\n\nconst marketOpen = 8 * 60 + 30;  // 08:30 hrs\nconst marketClose = 16 * 60 + 30; // 16:30 hrs\n\nconst isWeekday = (dayOfWeek >= 1 && dayOfWeek <= 5);\nconst isMarketHours = (currentTimeMinutes >= marketOpen && currentTimeMinutes <= marketClose);\n\nconst allowExecution = isManual || (isWeekday && isMarketHours);\n\nreturn [{\n  json: {\n    allowExecution,\n    isManual,\n    santiagoTime: santiagoTimeString,\n    dayOfWeek,\n    hours,\n    minutes,\n    isMarketHours\n  }\n}];"
+      },
+      "id": "33bcf4e9-1123-455b-a81e-ff882e30fa11",
+      "name": "Filtro Horario Bursátil (08:30 - 16:30)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "e0b9691b-cce9-4a92-8051-aa3b34204ff3",
+              "leftValue": "={{ $json.allowExecution }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "76629ad1-2292-4ec4-9f79-aa099d3e81ff",
+      "name": "¿Bolsa Abierta?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        680,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://scotiabankchile.finmarketslive.cl/www/corredora.html",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            },
+            {
+              "name": "Accept",
+              "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "a4d3345f-149b-449e-b9b9-dcbfe8351509",
+      "name": "GET Corredora (IPSA & Acciones)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        920,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://scotiabankchile.finmarketslive.cl/www/inversiones.html",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            },
+            {
+              "name": "Accept",
+              "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "bd053671-b0e5-4f4a-8d18-05047b74f358",
+      "name": "GET Inversiones (Indicadores & Commodities)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        920,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combinationMode": "multiplex",
+        "options": {}
+      },
+      "id": "ec0b2f56-2e86-4f4e-a131-4b13a77f3a9e",
+      "name": "Combinar Respuestas HTTP",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2.1,
+      "position": [
+        1140,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ====================================================================\n// Parser de Mercado Bolsa de Santiago e Indicadores Económicos\n// ====================================================================\n\nfunction parseChileanNumber(str) {\n  if (!str) return null;\n  const cleaned = str.replace(/[+%]/g, '').trim().replace(/\\./g, '').replace(',', '.');\n  const num = parseFloat(cleaned);\n  return isNaN(num) ? null : num;\n}\n\n// Obtenemos los HTML de ambas peticiones\nconst items = $input.all();\nlet corredoraHtml = '';\nlet inversionesHtml = '';\n\nfor (const item of items) {\n  const data = typeof item.json.data === 'string' ? item.json.data : JSON.stringify(item.json);\n  if (data.includes('Acciones IPSA') || data.includes('indicesSectorialName')) {\n    corredoraHtml = data;\n  }\n  if (data.includes('currencyName') || data.includes('commmoditiesName')) {\n    inversionesHtml = data;\n  }\n}\n\nconst fechaCaptura = new Date().toISOString();\n\n// --------------------------------------------------------------------\n// 1. IPSA PRINCIPAL & RENTABILIDAD\n// --------------------------------------------------------------------\nlet ipsaRecord = null;\nif (corredoraHtml) {\n  const ipsaPriceMatch = corredoraHtml.match(/class=\"valor\"[^>]*>\\s*<strong>([^<]+)<\\/strong>/);\n  const ipsaVarMatch = corredoraHtml.match(/Var\\. % d[ií]a[\\s\\S]*?class=\"nemo[^\"]*\">\\s*([^<\\s]+)/);\n  const ipsaDateMatch = corredoraHtml.match(/Fecha\\s*<strong>([^<]+)<\\/strong>/);\n  const ipsaPointsMatch = corredoraHtml.match(/\\[\\s*<span[^>]*class=\"nemo[^\"]*\">\\s*([^<]+)\\s*<\\/span>\\s*\\]/);\n\n  const minValMatch = corredoraHtml.match(/Valor\\s+m(?:[ií]|&iacute;)nimo\\s+del\\s+d(?:[ií]|&iacute;)a:[\\s\\S]*?<span class=\"valor\">\\s*([^<]+)\\s*<\\/span>/i);\n  const maxValMatch = corredoraHtml.match(/Valor\\s+m(?:[aá]|&aacute;)ximo\\s+del\\s+d(?:[ií]|&iacute;)a:[\\s\\S]*?<span class=\"valor\">\\s*([^<]+)\\s*<\\/span>/i);\n  const rentMtdMatch = corredoraHtml.match(/Mes a la fecha:[\\s\\S]*?<span class=\"[^\"]*\">\\s*([^<]+)\\s*<\\/span>/i);\n  const rent1mMatch = corredoraHtml.match(/1 Mes:[\\s\\S]*?<span class=\"[^\"]*\">\\s*([^<]+)\\s*<\\/span>/i);\n  const rent3mMatch = corredoraHtml.match(/3 Meses:[\\s\\S]*?<span class=\"[^\"]*\">\\s*([^<]+)\\s*<\\/span>/i);\n  const rent6mMatch = corredoraHtml.match(/6 Meses:[\\s\\S]*?<span class=\"[^\"]*\">\\s*([^<]+)\\s*<\\/span>/i);\n  const rentYtdMatch = corredoraHtml.match(/(?:Año|A&ntilde;o)\\s+a\\s+la\\s+Fecha:[\\s\\S]*?<span class=\"[^\"]*\">\\s*([^<]+)\\s*<\\/span>/i);\n\n  ipsaRecord = {\n    fecha_captura: fechaCaptura,\n    fecha_mercado: ipsaDateMatch ? ipsaDateMatch[1].trim() : null,\n    precio: parseChileanNumber(ipsaPriceMatch ? ipsaPriceMatch[1] : null),\n    variacion_pct: parseChileanNumber(ipsaVarMatch ? ipsaVarMatch[1] : null),\n    variacion_puntos: parseChileanNumber(ipsaPointsMatch ? ipsaPointsMatch[1] : null),\n    min_dia: parseChileanNumber(minValMatch ? minValMatch[1] : null),\n    max_dia: parseChileanNumber(maxValMatch ? maxValMatch[1] : null),\n    rent_mes_fecha: parseChileanNumber(rentMtdMatch ? rentMtdMatch[1] : null),\n    rent_1m: parseChileanNumber(rent1mMatch ? rent1mMatch[1] : null),\n    rent_3m: parseChileanNumber(rent3mMatch ? rent3mMatch[1] : null),\n    rent_6m: parseChileanNumber(rent6mMatch ? rent6mMatch[1] : null),\n    rent_ytd: parseChileanNumber(rentYtdMatch ? rentYtdMatch[1] : null)\n  };\n}\n\n// --------------------------------------------------------------------\n// 2. ACCIONES IPSA (30 Acciones)\n// --------------------------------------------------------------------\nconst accionesList = [];\nif (corredoraHtml) {\n  const constituentsMap = {};\n  const jsonConstituentsMatch = corredoraHtml.match(/var jsonConstituents = (\\[.*?\\]);/s);\n  if (jsonConstituentsMatch) {\n    try {\n      const list = JSON.parse(jsonConstituentsMatch[1]);\n      list.forEach(c => { constituentsMap[c.symbol] = c.name; });\n    } catch (e) {}\n  }\n\n  const stockRowRegex = /<td class=\"con-nombre\">\\s*<span class=\"ins constituentsNotation\"[^>]*title=\"([^\"]+)\"[^>]*>\\s*([^<]+)\\s*<\\/span>\\s*<\\/td>\\s*<td class=\"con-valor\">\\s*<span[^>]*>\\s*([^<]+)\\s*<\\/span>\\s*<\\/td>\\s*<td class=\"con-var\">\\s*<span[^>]*class=\"nemo\\s+([^\"]+)\"[^>]*>\\s*([^<]+)\\s*<\\/span>/g;\n  let match;\n  while ((match = stockRowRegex.exec(corredoraHtml)) !== null) {\n    const symbol = match[1].trim();\n    accionesList.push({\n      fecha_captura: fechaCaptura,\n      symbol: symbol,\n      nombre: constituentsMap[symbol] || symbol,\n      precio: parseChileanNumber(match[3]),\n      variacion_pct: parseChileanNumber(match[5]),\n      direccion: match[4].trim()\n    });\n  }\n}\n\n// --------------------------------------------------------------------\n// 3. ÍNDICES SECTORIALES\n// --------------------------------------------------------------------\nconst sectorialesList = [];\nif (corredoraHtml) {\n  const sectorRegex = /<span id=\"[0-9]+_([A-Z0-9]+)\" class=\"ins indicesSectorialName\">\\s*([^<]+)\\s*<\\/span>\\s*<\\/td>\\s*<td class=\"con-valor\">\\s*<span[^>]*>\\s*([^<]+)\\s*<\\/span>\\s*<\\/td>\\s*<td class=\"con-var\">\\s*<span class=\"nemo\\s+([^\"]+)\"[^>]*>\\s*([^<]+)\\s*<\\/span>/g;\n  let match;\n  while ((match = sectorRegex.exec(corredoraHtml)) !== null) {\n    sectorialesList.push({\n      fecha_captura: fechaCaptura,\n      codigo: match[1].trim(),\n      puntos: parseChileanNumber(match[3]),\n      variacion_pct: parseChileanNumber(match[5]),\n      direccion: match[4].trim()\n    });\n  }\n}\n\n// --------------------------------------------------------------------\n// 4. MAYORES ALZAS Y BAJAS\n// --------------------------------------------------------------------\nconst topsList = [];\nif (corredoraHtml) {\n  const topRegex = /<span class=\"ins stockTop\" title=([^>]+) id=\"TOP_name_[0-9]+\">\\s*([^<]+)\\s*<\\/span>[\\s\\S]*?<span class=\"off\" id=\"TOP_price_[0-9]+\">\\s*([^<]+)\\s*<\\/span>[\\s\\S]*?<span class=\"([^\"]+)\" id=\"TOP_pct_[0-9]+\">\\s*([^<]+)\\s*<\\/span>/g;\n  let match;\n  let pos = 1;\n  while ((match = topRegex.exec(corredoraHtml)) !== null) {\n    topsList.push({\n      fecha_captura: fechaCaptura,\n      tipo: 'alza',\n      posicion: pos++,\n      symbol: match[2].trim(),\n      precio: parseChileanNumber(match[3]),\n      variacion_pct: parseChileanNumber(match[5]),\n      direccion: match[4].trim()\n    });\n  }\n\n  const flopRegex = /<span class=\"ins stockFlop\" title=([^>]+) id=\"FLOP_name_[0-9]+\">\\s*([^<]+)\\s*<\\/span>[\\s\\S]*?<span class=\"off\" id=\"FLOP_price_[0-9]+\">\\s*([^<]+)\\s*<\\/span>[\\s\\S]*?<span class=\"([^\"]+)\" id=\"FLOP_pct_[0-9]+\">\\s*([^<]+)\\s*<\\/span>/g;\n  pos = 1;\n  while ((match = flopRegex.exec(corredoraHtml)) !== null) {\n    topsList.push({\n      fecha_captura: fechaCaptura,\n      tipo: 'baja',\n      posicion: pos++,\n      symbol: match[2].trim(),\n      precio: parseChileanNumber(match[3]),\n      variacion_pct: parseChileanNumber(match[5]),\n      direccion: match[4].trim()\n    });\n  }\n}\n\n// --------------------------------------------------------------------\n// 5. INDICADORES ECONÓMICOS (UF, UTM, Dólar, etc.)\n// --------------------------------------------------------------------\nconst indicadoresList = [];\nif (inversionesHtml) {\n  const indRegex = /<span id=\"[0-9]+_([^\"]+)\" class=\"ins currencyName\">\\s*([^<]+)\\s*<\\/span>\\s*<\\/td>\\s*<td class=\"con-valor\">\\s*<span[^>]*>\\s*([^<]+)\\s*<\\/span>\\s*<\\/td>\\s*<td class=\"con-var\">\\s*<span class=\"([^\"]+)\"[^>]*>\\s*([^<]+)\\s*<\\/span>/g;\n  let match;\n  while ((match = indRegex.exec(inversionesHtml)) !== null) {\n    indicadoresList.push({\n      fecha_captura: fechaCaptura,\n      nombre: match[2].trim(),\n      valor: parseChileanNumber(match[3]),\n      variacion_pct: parseChileanNumber(match[5]),\n      direccion: match[4].trim()\n    });\n  }\n}\n\n// --------------------------------------------------------------------\n// 6. COMMODITIES (Cobre Cash, Futuro, Petróleo, etc.)\n// --------------------------------------------------------------------\nconst commoditiesList = [];\nif (inversionesHtml) {\n  const commRegex = /<span id=\"[0-9]+_([^\"]+)\" class=\"ins commmoditiesName\">\\s*([^<]+)\\s*<\\/span>\\s*<\\/td>\\s*<td class=\"con-valor\">\\s*<span[^>]*>\\s*([^<]+)\\s*<\\/span>\\s*<\\/td>\\s*<td class=\"con-var\">\\s*<span class=\"([^\"]+)\"[^>]*>\\s*([^<]+)\\s*<\\/span>/g;\n  let match;\n  while ((match = commRegex.exec(inversionesHtml)) !== null) {\n    commoditiesList.push({\n      fecha_captura: fechaCaptura,\n      nombre: match[2].trim(),\n      valor: parseChileanNumber(match[3]),\n      variacion_pct: parseChileanNumber(match[5]),\n      direccion: match[4].trim()\n    });\n  }\n}\n\n// Retornamos un objeto consolidado para las ramas de inserción en PostgreSQL\nreturn [{\n  json: {\n    fecha_captura: fechaCaptura,\n    ipsa: ipsaRecord,\n    acciones: accionesList,\n    indicadores: indicadoresList,\n    commodities: commoditiesList,\n    sectoriales: sectorialesList,\n    tops: topsList,\n    resumen: {\n      total_acciones: accionesList.length,\n      total_indicadores: indicadoresList.length,\n      total_commodities: commoditiesList.length,\n      total_sectoriales: sectorialesList.length,\n      total_tops: topsList.length\n    }\n  }\n}];"
+      },
+      "id": "e81d77a2-990a-4279-8809-aa7bf1d3ee0b",
+      "name": "Parsear y Normalizar Datos Financieros",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO ipsa_snapshots (\n  fecha_captura,\n  fecha_mercado,\n  precio,\n  variacion_pct,\n  variacion_puntos,\n  min_dia,\n  max_dia,\n  rent_mes_fecha,\n  rent_1m,\n  rent_3m,\n  rent_6m,\n  rent_ytd\n) VALUES (\n  $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12\n) RETURNING id;",
+        "options": {
+          "queryReplacement": "={{ [$json.ipsa.fecha_captura, $json.ipsa.fecha_mercado, $json.ipsa.precio, $json.ipsa.variacion_pct, $json.ipsa.variacion_puntos, $json.ipsa.min_dia, $json.ipsa.max_dia, $json.ipsa.rent_mes_fecha, $json.ipsa.rent_1m, $json.ipsa.rent_3m, $json.ipsa.rent_6m, $json.ipsa.rent_ytd] }}"
+        }
+      },
+      "id": "c1a93b4a-5544-42b7-8628-98e3b3a6ea90",
+      "name": "Guardar IPSA en DB",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1620,
+        60
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "postgresCredential",
+          "name": "Postgres Bolsa Santiago"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extraer el array de acciones para inserción por lotes en PostgreSQL\nconst parent = $input.first().json;\nreturn (parent.acciones || []).map(item => ({ json: item }));"
+      },
+      "id": "5221b6d2-114a-4a2e-83ea-ff49964821a7",
+      "name": "Desglosar Acciones IPSA",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1620,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list",
+          "cachedResultName": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "acciones_ipsa_snapshots",
+          "mode": "list",
+          "cachedResultName": "acciones_ipsa_snapshots"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "extraOptions": {}
+        }
+      },
+      "id": "78788e09-0268-45b6-b519-aa5799781cb9",
+      "name": "Guardar Acciones en DB",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1860,
+        220
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "postgresCredential",
+          "name": "Postgres Bolsa Santiago"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extraer el array de indicadores económicos para inserción en PostgreSQL\nconst parent = $input.first().json;\nreturn (parent.indicadores || []).map(item => ({ json: item }));"
+      },
+      "id": "62b5d433-281b-468a-b851-40be9987cf51",
+      "name": "Desglosar Indicadores",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1620,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list",
+          "cachedResultName": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "indicadores_economicos_snapshots",
+          "mode": "list",
+          "cachedResultName": "indicadores_economicos_snapshots"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "extraOptions": {}
+        }
+      },
+      "id": "9a7516d2-6438-4e58-9442-7c309859f5b2",
+      "name": "Guardar Indicadores en DB",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1860,
+        380
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "postgresCredential",
+          "name": "Postgres Bolsa Santiago"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extraer commodities y sectores para inserción\nconst parent = $input.first().json;\nconst commodities = (parent.commodities || []).map(item => ({ json: { ...item, _type: 'commodity' } }));\nconst sectoriales = (parent.sectoriales || []).map(item => ({ json: { ...item, _type: 'sectorial' } }));\nreturn [...commodities, ...sectoriales];"
+      },
+      "id": "75c32890-449e-4df7-9a07-8e6f1a877543",
+      "name": "Desglosar Commodities y Sectores",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1620,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO commodities_snapshots (fecha_captura, nombre, valor, variacion_pct, direccion)\nVALUES ($1, $2, $3, $4, $5);",
+        "options": {
+          "queryReplacement": "={{ [$json.fecha_captura, $json.nombre, $json.valor, $json.variacion_pct, $json.direccion] }}"
+        }
+      },
+      "id": "19b489a2-7d04-45aa-b2b5-e633d7b80a45",
+      "name": "Guardar Commodities en DB",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1860,
+        540
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "postgresCredential",
+          "name": "Postgres Bolsa Santiago"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "bolsa-santiago/latest",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "f5e18239-0112-42da-91ca-eeff54471ab2",
+      "name": "Webhook API /latest",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        220,
+        740
+      ],
+      "webhookId": "bolsa-santiago-latest"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT json_build_object(\n  'ipsa', (SELECT row_to_json(i) FROM v_ipsa_latest i),\n  'acciones', (SELECT json_agg(a) FROM v_acciones_latest a),\n  'indicadores', (SELECT json_agg(ind) FROM v_indicadores_latest ind),\n  'commodities', (SELECT json_agg(c) FROM v_commodities_latest c),\n  'indices_sectoriales', (SELECT json_agg(s) FROM v_indices_sectoriales_latest s)\n) AS data;",
+        "options": {}
+      },
+      "id": "4210e7b2-32b1-4f10-bf91-aa344908ef17",
+      "name": "Consultar Vistas de Últimos Precios",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        460,
+        740
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "postgresCredential",
+          "name": "Postgres Bolsa Santiago"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "893c5d64-c277-4b19-b223-99b5e52c80aa",
+      "name": "Responder JSON API",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        700,
+        740
+      ]
+    }
+  ],
+  "connections": {
+    "Trigger Cada 5 Minutos": {
+      "main": [
+        [
+          {
+            "node": "Filtro Horario Bursátil (08:30 - 16:30)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Test Manual": {
+      "main": [
+        [
+          {
+            "node": "Filtro Horario Bursátil (08:30 - 16:30)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtro Horario Bursátil (08:30 - 16:30)": {
+      "main": [
+        [
+          {
+            "node": "¿Bolsa Abierta?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Bolsa Abierta?": {
+      "main": [
+        [
+          {
+            "node": "GET Corredora (IPSA & Acciones)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET Inversiones (Indicadores & Commodities)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Corredora (IPSA & Acciones)": {
+      "main": [
+        [
+          {
+            "node": "Combinar Respuestas HTTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Inversiones (Indicadores & Commodities)": {
+      "main": [
+        [
+          {
+            "node": "Combinar Respuestas HTTP",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Combinar Respuestas HTTP": {
+      "main": [
+        [
+          {
+            "node": "Parsear y Normalizar Datos Financieros",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parsear y Normalizar Datos Financieros": {
+      "main": [
+        [
+          {
+            "node": "Guardar IPSA en DB",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Desglosar Acciones IPSA",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Desglosar Indicadores",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Desglosar Commodities y Sectores",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Desglosar Acciones IPSA": {
+      "main": [
+        [
+          {
+            "node": "Guardar Acciones en DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Desglosar Indicadores": {
+      "main": [
+        [
+          {
+            "node": "Guardar Indicadores en DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Desglosar Commodities y Sectores": {
+      "main": [
+        [
+          {
+            "node": "Guardar Commodities en DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook API /latest": {
+      "main": [
+        [
+          {
+            "node": "Consultar Vistas de Últimos Precios",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar Vistas de Últimos Precios": {
+      "main": [
+        [
+          {
+            "node": "Responder JSON API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Santiago"
+  }
+}

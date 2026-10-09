@@ -1,0 +1,2017 @@
+Title: Live Content
+
+Description: Fetched live
+
+Source: https://scotiabankchile.finmarketslive.cl/www/corredora.html
+
+---
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://scotiabankchile.finmarketslive.cl/images/favicon.png">
+    <link rel="stylesheet" type="text/css" href="https://scotiabankchile.finmarketslive.cl/css/v2/bootstrap/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="https://scotiabankchile.finmarketslive.cl/css/v2/bootstrap/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" type="text/css" href="https://scotiabankchile.finmarketslive.cl/css/v2/estilos.css?op=34b862e26d7bb7947811db53ccb649dd">
+    <link rel="stylesheet" type="text/css" href="https://scotiabankchile.finmarketslive.cl/css/v2/simplebar/simplebar.css">
+    <link rel="stylesheet" type="text/css" href="https://scotiabankchile.finmarketslive.cl/css/facss/all.css">
+    <link rel="stylesheet" type="text/css" href="https://scotiabankchile.finmarketslive.cl/css/fuente/gotham.otf">
+    <title>Scotiabank Chile - Inversiones</title>
+
+    <script type="text/javascript" language="javascript" src="https://scotiabankchile.finmarketslive.cl/js/v2/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://scotiabankchile.finmarketslive.cl/js/v2/popper.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://scotiabankchile.finmarketslive.cl/js/v2/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://scotiabankchile.finmarketslive.cl/js/v2/bootstrap/Moment.js"></script>
+    <script type="text/javascript" language="javascript" src="https://scotiabankchile.finmarketslive.cl/js/v2/bootstrap/locale/es.js"></script>
+    <script type="text/javascript" language="javascript" src="https://scotiabankchile.finmarketslive.cl/js/v2/bootstrap/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://scotiabankchile.finmarketslive.cl/js/v2/bootstrap/bootstrap3-typeahead.js"></script>
+    <script src="https://scotiabankchile.finmarketslive.cl/js/v2/simplebar/simplebar.js" type="text/javascript" defer></script>
+    <script type="text/javascript" language="javascript" src="https://scotiabankchile.finmarketslive.cl/js/functions.js"></script>
+    <script src="https://scotiabankchile.finmarketslive.cl/js/amcharts/amcharts.js?k=35441" type="text/javascript" defer></script>
+    <script src="https://scotiabankchile.finmarketslive.cl/js/amcharts/serial.js?k=35441" type="text/javascript" defer></script>
+
+    
+    <script type="text/javascript">
+        var rootSite = 'https://scotiabankchile.finmarketslive.cl/www/';
+        var rootSiteImg = 'https://scotiabankchile.finmarketslive.cl/images/';
+
+        //Initialisation of the JS API in the general page
+        var d = document.domain.split('.');
+        if (d.length>2) { document.domain = d[d.length-2] + '.' + d[d.length-1]; }
+    </script>
+
+    <script type="text/javascript" src="https://push.finmarkets.cl/files/push-api/1.0.0/push.js"></script><script type="text/javascript">
+if (push)
+	push.setServerProperties({"token":"eyJraWQiOiJ2MSIsInVpZCI6InNjb3RpYWJhbmtjaGlsZTo5ZTJmN2IxODRiMWFkNDBlIiwic2NvcGUiOiJ1c2VyIiwiZXhwIjoxNzkwNjQ4NzIyfQ.79c6ExDB8EeYOY7yikCVbQCVDfFJ9s-Scvm97VH4Vac","server":"push2.finmarkets.cl","port":443,"protocol":"https","gmt":-3,"environment":"live","mainChannel":"push"});
+</script>
+<script type="text/javascript">
+function DomReady() {
+	if (push){
+		push.init();
+		setTimeout(function(){
+			location.reload();
+		}, 60 * 60 * 1000);
+	}
+}
+
+if (document.addEventListener) {
+	document.addEventListener("DOMContentLoaded", DomReady, false);
+} else if (document.attachEvent) {
+	document.attachEvent("onreadystatechange", DomReady);
+}
+
+</script>
+        <script src="https://scotiabankchile.finmarketslive.cl/js/push/pushFormat.js" type="text/javascript" defer></script>
+    
+<script type="text/javascript" defer>
+var soloFondos = '';
+//Get module http address
+var Site  = "https://scotiabankchile.finmarketslive.cl/www/";
+
+//Start chart and info scripts
+function ClickNotation(idChar, idNot, nameIns, calidadIndice) {
+	changeIDChart(idChar, idNot);
+	if(!calidadIndice)
+		calidadIndice = 'RLT';
+ 	changeInfoChartMini(idChar, idNot, nameIns, calidadIndice);
+}
+
+/**
+ * Cambia información de gráfico mini
+ *
+ */
+function changeInfoChartMini(idInfo, id, name, calidadIndice) {
+  $('#ModuleInfoChart'+idInfo).fadeTo("slow", 0.4);
+  push.unsubscribeAll(document.getElementById('ModuleInfoChart'+idInfo));
+    $.ajax({
+        type: "POST",
+        url: "https://scotiabankchile.finmarketslive.cl/www/infoChart/infoMini.php",
+        data: ({ID_NOTATION: id, NAME: name, CONT: idInfo, CALIDAD: calidadIndice}), //para escapar & en nombre
+        success: function(txt) {
+            var validate = txt.indexOf('class=green');
+            if(validate == -1)
+                setColorLine(0,idInfo);
+            else
+                setColorLine(1,idInfo);
+            $('#ModuleInfoChart'+idInfo).html(txt);
+            push.subscribeObj(document.getElementById('ModuleInfoChart'+idInfo));
+            $('#ModuleInfoChart'+idInfo).fadeTo("slow", 1);
+        }
+    })
+}
+
+//Abre ventana de noticias
+function newsClickTitulo(titulo, contenido, fuente){
+
+    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+    /* your code here */
+
+        $('#noticiamodal').html(
+            '<div class="modal-content bg-modal-content">\
+                <div class="modal-header titulo-noticia" id="titulo">\
+                    Noticias\
+                    <button type="button" class="close" data-dismiss="modal"><i class="fas fa-times"></i></button>\
+                </div>\
+                <div class="modal-body">\
+                    <div class="col-12 contenido-noticia">\
+                        <p class="bold-font"> ' + titulo + '</p>\
+                        <p>' + contenido + '</p>\
+                        <p>Fuente: ' + fuente + '</p>\
+                    </div>\
+                </div>\
+                <div class="modal-footer">\
+                    <button type="button" class="btn btn-blanco" data-dismiss="modal">Cerrar</button>\
+                </div>\
+            </div>'
+        );
+
+        $('#noticia-modal').modal();
+
+    }else{
+        $('#noticia').animate({
+            width: "340px",
+            padding: "5px 16px"
+        }, {duration: 500,
+        complete: function() {
+
+            $('#noticia').html('<div class="salir" onclick="cerrar();"><i class="fas fa-times"></i></div> \
+            <div class="titulo-modal-flotante">' + titulo + '</div> \
+            <div class="contenido-modal-flotante">' + contenido + '</div> \
+            <div class="fuente-modal-flotante">Fuente: ' + fuente + '</div>');
+
+            // $('#noticia').html('<img onclick="cerrar();" src="https://scotiabankchile.finmarketslive.cl/images/close_icon.gif"></img><h2>'+titulo+'</h2><p>'+contenido+'<br/><br/>Fuente: <i>'+fuente+'</i></p>');
+        }});
+    }
+}
+
+function cerrar() {
+	$('#noticia').html('');
+	$('#noticia').animate({width: "0px", padding: "0px"}, {duration: 300});
+}
+</script>
+
+</head>
+<body>
+    <div class="col-12 header-custom d-none d-sm-block">
+        <div class="container">
+            <div class="row px-2">
+                <div class="col-6 col-md-3 order-1 order-md-1 py-2 px-0"><img src="https://scotiabankchile.finmarketslive.cl/images/logo-sb.svg" height="25"></div>
+                <div class="col-12 col-md-7 text-right estilo-custom order-3 order-md-2">
+                    <div class="contenedor-menu">
+                        <div class="al-menu">
+                            <div class="fecha">Lunes 28 de Septiembre del 2026</div>
+                            <div class="tab-custom"><a class="" href="https://scotiabankchile.finmarketslive.cl/www/inversiones.html">Mercados</a></div>
+                            <!--div class="tab-custom"><a class="" href="https://scotiabankchile.finmarketslive.cl/www/v2/fondosmutuos-home.html">Fondos Mutuos</a></div-->
+                            <div class="tab-custom"><a class="active" href="https://scotiabankchile.finmarketslive.cl/www/corredora.html">Acciones</a></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-2 text-right order-2 order-md-3 py-2 px-0 pfin"><span style="font-weight:bold">Portal</span>Financiero</div>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-menu-responsive d-sm-none">
+        <div class="col-12 text-center portal-fuente"><span style="font-weight:bold">Portal</span>Financiero</div>
+      <a class="navbar-brand" href="#"><img src="https://scotiabankchile.finmarketslive.cl/images/logo.png"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="icono-toggle"><i class="fas fa-bars"></i></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="" href="https://scotiabankchile.finmarketslive.cl/www/inversiones.html">Mercados</a>
+          </li>
+          <!--li class="nav-item">
+            <a class="" href="https://scotiabankchile.finmarketslive.cl/www/v2/fondosmutuos-home.html">Fondos Mutuos</a>
+          </li-->
+          <li class="nav-item">
+            <a class="active-menu" href="https://scotiabankchile.finmarketslive.cl/www/corredora.html">Acciones</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="modal" id="responsabilidades">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header modal-title">
+        Descargo de Responsabilidades
+        <button type="button" class="close" data-dismiss="modal"><i class="fas fa-times"></i></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="col-12 px-0 fuente-normal">
+            <p class="bold-font">
+                Notificación
+            </p>
+            <p>
+                SÍRVASE LEER CUIDADOSAMENTE LOS PRESENTES TÉRMINOS Y CONDICIONES.
+            </p>
+            <p>
+                EL ACCESO A ESTE SITIO Y A CUALQUIER PÁGINA DEL MISMO IMPORTA ACEPTACIÓN DE ESTOS TÉRMINOS Y CONDICIONES Y LO OBLIGA A CUMPLIR Y RESPETAR LAS MISMAS.
+            </p>
+            <p>
+                EN CASO DE QUE USTED NO ESTÉ DE ACUERDO CON LOS SOGUIENTES TÉRMINOS Y CONDICIONES, NO ACCEDA A ESTE SITIO O CUALQUIER PÁGINA DEL MISMO.
+            </p>
+            <p>
+                <span class="bold-font">1.-</span> La información, materiales, textos, gráficos, conexiones y otros que figuran en el presente sitio se suministran de la manera en que se encuentran y como están disponibles. Asimismo, los términos, condiciones y descripciones que aparecen están sujetos a cambio. No todos los productos y servicios se encuentran disponibles en todas las áreas geográficas. El otorgamiento de los productos y servicios ofrecidos en este sitio está sujeto a la determinación y aceptación final de Scotiabank Chile.
+            </p>
+            <p>
+                <span class="bold-font">2.-</span> Scotiabank Chile y sus filiales se esfuerzan por asegurar en todo momento la exactitud de esta información, pero no otorgan garantía alguna sobre la exactitud, adecuación o integridad de la información y materiales de este sitio ni asumen responsabilidad alguna por las discrepancias que pudieren encontrarse entre la versión electrónica de los documentos que aquí se presentan y su impresa, la cual se mantiene como versión oficial de los mismos.
+            </p>
+            <p>
+                <span class="bold-font">3.-</span> Scotiabank Chile y sus filiales no serán responsables en caso alguno del daño que pudiere ocasionarse por el uso, imposibilidad de uso, falla en el rendimiento, error, omisión, interrupción, defecto, demora en la operación o transmisión, virus o falla de sistema o línea de este sitio. Asimismo, los enlaces y vínculos no implican responsabilidad alguna para el Banco y sus filiales ni aprobación por parte de éstos respecto de la información contenida en los mismos; los enlaces e hiperconexiones con otros medios de Internet son a su propio riesgo; Scotiabank Chile y sus filiales no investigan, no verifican, no controlan ni respaldan el contenido, exactitud, legalidad y opiniones expresadas en otras conexiones suministradas por estos medios.
+            </p>
+            <p>
+                <span class="bold-font">4.-</span> La totalidad de la información que se presenta a Scotiabank Chile y a sus filiales será considerada para todos los efectos legales de propiedad de Scotiabank Chile y éste podrá utilizar con cualquier fin toda idea, concepto, conocimiento o técnica incluidas en la información que proporcione un visitante a través de este sitio. Scotiabank Chile no estará sujeto a obligación alguna en cuanto a la confidencialidad de la información presentada, salvo acuerdo en contrario entre el Banco y sus clientes y las exigencias legales que rigen actualmente al respecto y las que se incorporen en el futuro.
+            </p>
+            <p>
+                <span class="bold-font">5.-</span> Los derechos de propiedad intelectual de estas páginas, de las pantallas que muestran estas páginas, de la información y material que aparecen en las mismas y de su disposición pertenecen a Scotiabank Chile, salvo que se indique lo contrario.
+            </p>
+            <p>
+                <span class="bold-font">6.-</span> El logo de Scotiabank Chile, sus filiales y Scotiabank son marcas registradas.
+            </p>
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+    <div class="modal" id="defensoria">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header modal-title">
+        Defensoría Cliente
+        <button type="button" class="close" data-dismiss="modal"><i class="fas fa-times"></i></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="col-12 fuente-normal">
+            <p class="bold-font">¿Qué es el sistema de Defensoría del Cliente?</p>
+            <p>Nuestro Banco, junto a la Asociación de Bancos e Instituciones Financieras (ABIF), ha desarrollado la figura del Defensor del Cliente, mediante la cual usted puede solicitar un pronunciamiento sobre algún problema que haya tenido con nuestro banco, y cuya respuesta no sea de su entera satisfacción.</p>
+            <p>No obstante, esta figura supone una serie de requisitos previos sobre los que le invitamos a informarse aquí.</p>
+            <p>Si usted decide utilizar esta alternativa, cuenta además con la posibilidad de hacer un <a href="http://www.defensoriadelclientedeabif.cl/Sitio/Revisar.aspx">Seguimiento al Estado de su Reclamo</a>, accediendo a la página de la Asociación de Bancos e Instituciones Financieras.</p>
+            <p>Ante cualquier duda o inquietud llámenos al 600 6 700 500</p>
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" defer>
+    var chartColorLine = "#EC111A";
+    var simpleInfoChart = true;
+    var soloFondos = '';
+    var marketPage = 'CL';
+    $(document).ready(function(){
+        $('.loopa').click(function(){
+            if ($('#notation_search').val() != '') {
+                searchAction($('#notation_search').val(), $('#symbol_search').val());
+            } else {
+                alert ('No ha seleccionado nada para buscar');
+            }
+        });
+
+        $('.comp').click(function(){
+            if ($('#notation_search').val() != '') {
+                compararAction($('#notation_search').val(), $('#symbol_search').val());
+            } else {
+                alert ('No ha seleccionado nada para comparar');
+            }
+        });
+    });
+
+    function clearSearchInput(){
+        if ($('#notation_search').val() != '') {
+            $('#notation_search').val('');
+            $('#search_instrument').val('Buscar');
+        }
+    }
+
+    function searchAction(idNot,nameSym){
+        getChartId(idNot,nameSym);
+        changeInfoChart(idNot,nameSym);
+        reloadRentabilidad(idNot);
+    }
+
+    function compararAction(idNot,nameSym){
+        idNot = $.trim(idNot);
+        nameSym = $.trim(nameSym);
+        setComparar(idNot,nameSym);
+    }
+
+    function indicesSectorialesClick(idNot,nameSym){
+        idNot =	$.trim(idNot);
+        nameSym = $.trim(nameSym);
+        clearSearchInput();
+        getChartId(idNot,nameSym);
+        changeInfoChart(idNot,nameSym);
+        reloadRentabilidad(idNot);
+        $('html, body').animate({ scrollTop: 0 }, 0);
+    }
+
+    //Clic en cada Indice para poder obtener el gráfico (TOPFLOP)
+    function topflopIndicesClickNotation(idNot,nameSym){
+        idNot =	$.trim(idNot);
+        nameSym =	$.trim(nameSym);
+        clearSearchInput();
+        getChartId(idNot,nameSym);
+        changeInfoChart(idNot,nameSym);
+        reloadRentabilidad(idNot);
+        $('html, body').animate({ scrollTop: 0 }, 0);
+    }
+
+    //Clic Constituyentes
+    function constituentsListClickNotation(idNot,nameSym){
+        idNot =	$.trim(idNot);
+        nameSym =	$.trim(nameSym);
+        clearSearchInput();
+        getChartId(idNot,nameSym);
+        changeInfoChart(idNot,nameSym);
+        reloadRentabilidad(idNot);
+        $('html, body').animate({ scrollTop: 0 }, 0);
+    }
+</script>
+
+<div class="container bg-blanco py-2">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="col-12 px-0">
+                <script src="https://scotiabankchile.finmarketslive.cl/js/histChart.js?up=34b862e26d7bb7947811db53ccb649dd" type="text/javascript"></script>
+<script src="https://scotiabankchile.finmarketslive.cl/js/functionChart.js?op=34b862e26d7bb7947811db53ccb649dd" type="text/javascript"></script>
+
+<script type="text/javascript">
+    //Get Id notation by Default
+    var idNotation = 3969;
+    var nameInstrument = "IPSA";
+        //Get module http address
+    var Site  = "https://scotiabankchile.finmarketslive.cl/www/";
+    var IMG  = "https://scotiabankchile.finmarketslive.cl/images/";
+</script>
+
+<div class="bigChart_top" id="displayInfo" style="width:100%"></div>
+
+<div id="loadingChart" style="display: block;"><i class="fas fa-spinner fa-pulse fa-fw fa-3x"></i></div>
+
+<div id="grafico_1" class="chart bigChart" style="width:100%; height:275px;"></div><!--chart-->
+
+<div class="col-12 py-2 px-0 text-center">
+    <div class="periodo fuente-normal d-none d-sm-inline">
+        Periodo:
+    </div>
+    <div class="desde">
+        <div class="input-group">
+            <input type="text" id="pickdateInit" class="form-control input-custom" id="" placeholder="Desde">
+        </div>
+    </div>
+    <div class="hasta">
+        <div class="input-group">
+            <input type="text" id="pickdateFin" class="form-control input-custom" id="" placeholder="Hasta">
+        </div>
+    </div>
+    <div class="btn-periodo botChartCalculate" id="calcularGrafico"><i class="fas fa-angle-right"></i></div>
+
+    <div class="periodo-tab navBotChart">
+        <ul>
+            <li id="1M" class="navbtn"><div onclick="setZoom('1M');">1M</div></li>
+            <li id="3M" class="navbtn"><div onclick="setZoom('3M');">3M</div></li>
+            <li id="6M" class="navbtn"><div onclick="setZoom('6M');">6M</div></li>
+            <li id="1Y" class="navbtn liOn"><div onclick="setZoom('1Y');">12M</div></li>
+        </ul>
+    </div>
+</div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <!-- Buscador -->
+            <div class="row">
+                <script type="text/javascript" charset="utf-8">
+    var activoInstrumento = idNotation;
+    var itemsResp = 'all';
+    $(document).ready(function(eb){
+        $('#search_instrument').click(function(){ $(this).val(''); });
+        $('#search_instrument').blur(function(){ $(this).val(''); });
+        if( $('#instrumento_ffmm').val() != '' ) itemsResp = 15;
+
+        /**
+         * Buscador de Instrumentos
+         *
+         */
+        $('#search_instrument').typeahead({
+            items: itemsResp,
+            minLength: 2,
+            limit: 10,
+            pathImg: rootSiteImg + 'flags/',
+            source: function (query, process) {
+                $.ajax({
+                    url: rootSite + "search/searchJSON.php",
+                    type: 'GET',
+                    dataType: 'JSON',
+                    data: {SEARCH_VALUE: query, MARKET: 'CL', FFMM: $('#instrumento_ffmm').val() },
+                    success: function(data) {
+                        process(data);
+                    }
+                });
+            },
+            afterSelect: function(item) {
+                $("#notation_search").val(item.id);
+                $("#symbol_search").val(item.symbol);
+                $("#instrumento_id_simple").val(item.id);
+                $("#instrumento_nombre_simple").val(item.name);
+                $('#instrumento_simbolo_simple').val(item.symbol);
+                $('#instrumento_calidad_simple').val(item.qlt);
+                if( $('#instrumento_ffmm').val() != '' ) $('#search_instrument').val('');
+                //searchAction(item.id, item.symbol);
+                return true;
+            }
+        });
+
+        /**
+         * Buscar según selección
+         *
+         */
+        $('.loopaSearch').click(function(){
+            if ($('#notation_search').val() != '') {
+                searchAction($('#notation_search').val(), $('#symbol_search').val());
+            } else {
+                alert ('Busque y seleccione un instrumento.');
+            }
+        });
+
+    });
+</script>
+
+<div class="col-12 col-sm-6 fuente-normal" id="moduleSearch">
+    <div class="input-group">
+        <input id="notation_search" type="hidden" />
+        <input id="symbol_search" type="hidden" />
+        <input id="instrumento_id_simple" type="hidden" />
+        <input id="instrumento_nombre_simple" type="hidden" />
+        <input id="instrumento_simbolo_simple" type="hidden" />
+        <input id="instrumento_calidad_simple" type="hidden" />
+        <input id="instrumento_ffmm" type="hidden" value="" />
+        <input type="text" class="form-control input-custom" name="search_instrument" id="search_instrument" placeholder="Buscar...">
+    </div>
+</div>
+
+<div class="col-12 col-sm-6">
+    <div class="row">
+        <div class="col-6 text-center"><a class="btn btnScotia red loopaSearch"><i class="fas fa-search brdr5"></i> Buscar</a></div>
+        <div class="col-6 text-center"><a class="btn btnScotia red comp"><i class="fa fa-chart-line brdr5"></i> Comparar</a></div>
+    </div>
+</div>            </div><!-- Buscador -->
+
+            <div class="row py-2">
+                <!-- Header Chart -->
+                <div id="ModuleInfoChart" class="col-12">
+                        <input type="hidden" id="actualIDNotation" value="3969" />
+
+    <!-- topChart -->
+    <div class="col-12">
+		<div class="row topChart" id="Edom:2265,i:3969,q:1,c:pushFilter">
+	                    <div class="col-12 px-1 fuente-normal">
+                                    <span><strong>IPSA&nbsp;<span class="small">(Tiempo Real)</span></strong></span>
+                            </div>
+	        <div class="col-5 px-1">
+	            <ul class="list-soft">
+	                <li>Precio</li>
+	                <li>
+	                    <span class="valor" data-bind="text: price">
+	                        <strong>11.137,23</strong>
+	                    </span>
+	                </li>
+	            </ul>
+	        </div><!--col5-->
+	        <div class="col-3 px-1 text-center align-self-end">
+	            <ul class="list-soft">
+	                <li>Var. % día</li>
+	                <li>
+	                    <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+	                        -1,06%	                    </span>
+	                </li>
+	            </ul>
+	        </div><!--col3-->
+	        <div class="col-4 px-1 text-right align-self-end">
+	            <ul class="list-soft">
+	                <li>Fecha <strong>28/09/2026</strong></li>
+	                <li>
+	                    [<span data-bind="text: performance, style: {color: color, background: background}" class="nemo red">
+	                        -119,5700	                    </span>]
+	                </li>
+	            </ul>
+	        </div><!--col4-->
+
+	    </div><!--topChart-->
+	</div>
+
+    <!-- Puntas Acciones -->
+    
+<script type="text/javascript">
+$(document).ready(function() {
+    /**
+     * Detalle de cada uno de los FFMM
+     *
+     */
+    $('.instrumentDetalleInfo').click(function (e) {
+        e.preventDefault();
+        var tmp = this.id.split('_');
+        var idNotation = tmp[1];
+        var manager = (tmp[2] == '10') ? 'BBVA' : 'SCO';
+        var hideTopMenu = $('#hideTopMenu').val();
+        if (idNotation)
+            window.location.href = rootSite + "tipoFondo.html?ID_NOTATION=" + idNotation + "&tipoFFMM=" + manager + '&hideTopMenu=' + hideTopMenu;
+        return false;
+    });
+});
+
+function changeInfoChart(id,name){
+    $('#ModuleInfoChart').fadeTo("slow", 0.4);
+    hideInfo = typeof(hideInfo) != 'undefined' ? hideInfo : '';
+    $.ajax({
+        type: "POST",
+        url: rootSite + "infoChart/infoChart.php",
+        data: 'ID_NOTATION='+id+'&NAME='+name+'&CONT=0&HIDEINFO='+hideInfo,
+        success: function(txt) {
+            $('#ModuleInfoChart').html(txt);
+            $('#ModuleInfoChart').fadeTo("slow", 1);
+        }
+    });
+}
+</script>
+                </div>
+            </div>
+
+            <!-- Rentabilidad -->
+            <div id="blkRentabilidad">
+                <script type="text/javascript">
+<!--
+//funcion que recarga modulo IndicesTop por ajax
+function reloadRentabilidad(idNotation)
+{
+    $('#blkRentabilidad').fadeTo("slow", 0.4);
+    //if (typeof domhandler == undefined){ return false; }
+		//quito los Notation del push actual
+		//domhandler.unregisterDomHandlerChilds('blkRentabilidad');
+
+    $.ajax({
+        type: "POST",
+        url: "https://scotiabankchile.finmarketslive.cl/www/rentabilidad/rentabilidad.php",
+        data: 'notation='+idNotation,
+        success: function(txt){
+            $('#blkRentabilidad').html(txt);
+            //domhandler.registerDomHandlerChilds('blkRentabilidad');
+            $('#blkRentabilidad').fadeTo("slow", 1);
+        }
+    });
+}
+//-->
+</script>
+
+
+<div class="col-12 col-lg-7 px-0 fuente-normal mt-2">
+    <div class="row">
+        <div class="col-7">
+            <span style="color:#bf0000"><i class="fas fa-stop"></i></span> Valor m&iacute;nimo del d&iacute;a:
+        </div>
+        <div class="col-5 bold-font">
+            <span class="valor">11.134,72</span>
+        </div>
+        <div class="col-7">
+            <span style="color:#00bf00"><i class="fas fa-stop"></i></span> Valor m&aacute;ximo del d&iacute;a:
+        </div>
+        <div class="col-5 bold-font">
+            <span class="valor">11.243,95</span>
+        </div>
+    </div>
+</div>
+
+<div class="col-12 px-0 rojo py-1">
+    Rentabilidad
+</div>
+<div class="row">
+        <div class="col-12 col-lg-9 fuente-normal">
+        <div class="row">
+            <div class="col-6">Mes a la fecha:</div>
+            <div class="col-6 text-right">
+                <span class="red">-0,52%</span>
+            </div>
+            <div class="col-6">1 Mes:</div>
+            <div class="col-6 text-right">
+                <span class="red">-0,99%</span>
+            </div>
+            <div class="col-6">3 Meses:</div>
+            <div class="col-6 text-right">
+                <span class="green">+5,14%</span>
+            </div>
+            <div class="col-6">6 Meses:</div>
+            <div class="col-6 text-right">
+                <span class="green">+8,14%</span>
+            </div>
+            <div class="col-6">Año a la Fecha:</div>
+            <div class="col-6 text-right">
+                <span class="green">+7,40%</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-3 pt-3 text-center">
+        <a href="https://scotiaclientes.optimuscb.cl/index.html?mobile=true" target="_blank" class="btn btnScotia">
+            <i class="fas fa-shopping-cart brdr5 p-2"></i>
+            <br>Acceso clientes
+        </a>
+    </div>
+</div>
+            </div><!-- Rentabilidad -->
+
+        </div>
+    </div>
+
+    <div class="col-12 px-0 py-3">
+        <div class="row">
+            <script type="text/javascript">
+<!--
+$(document).ready(function(){
+	$(".indicesSectorialName").click(function(){
+		var datosIndices = $(this).attr("id");
+		datosIndices = datosIndices.split("_");
+		var idIndices = datosIndices[0];
+		var nameIndice = datosIndices[1];
+		indicesSectorialesClick(idIndices,nameIndice);
+	});
+});
+//-->
+</script>
+
+<div class="col-12 col-md-6 col-lg-3">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12 px-0 text-center bg-custom-border font-indicadores">
+                Indices Sectoriales
+            </div>
+            <div class="col-12 px-2 py-2">
+                <table class="table-striped">
+                    <thead>
+                    <tr>
+                        <th class="tabla-nombre">Nombre</th>
+                        <th class="tabla-puntos">Puntos</th>
+                        <th class="tabla-var">Var %</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                                            <tr class="gris" id="Edom:12230,i:3969,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span id="3969_IPSA" class="ins indicesSectorialName">
+                                    IPSA                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span data-bind="text: price">11.137,23</span>
+                            </td>
+                            <td class="con-var">
+                                <span class="nemo red" data-bind="text: performance_pct, style: {color: color, background: background}">
+                                    -1,06%                                </span>
+                            </td>
+                        </tr>
+                                            <tr  id="Edom:18987,i:3970,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span id="3970_IGPA" class="ins indicesSectorialName">
+                                    IGPA                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span data-bind="text: price">56.156,79</span>
+                            </td>
+                            <td class="con-var">
+                                <span class="nemo red" data-bind="text: performance_pct, style: {color: color, background: background}">
+                                    -1,03%                                </span>
+                            </td>
+                        </tr>
+                                            <tr class="gris" id="Edom:24088,i:57644,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span id="57644_INDUSTRIAL" class="ins indicesSectorialName">
+                                    INDUSTRIAL                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span data-bind="text: price">2.044,96</span>
+                            </td>
+                            <td class="con-var">
+                                <span class="nemo red" data-bind="text: performance_pct, style: {color: color, background: background}">
+                                    -1,54%                                </span>
+                            </td>
+                        </tr>
+                                            <tr  id="Edom:31140,i:57632,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span id="57632_FINANCLS" class="ins indicesSectorialName">
+                                    FINANCLS                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span data-bind="text: price">2.653,13</span>
+                            </td>
+                            <td class="con-var">
+                                <span class="nemo red" data-bind="text: performance_pct, style: {color: color, background: background}">
+                                    -0,55%                                </span>
+                            </td>
+                        </tr>
+                                            <tr class="gris" id="Edom:38874,i:57650,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span id="57650_DISCRET" class="ins indicesSectorialName">
+                                    DISCRET                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span data-bind="text: price">864,73</span>
+                            </td>
+                            <td class="con-var">
+                                <span class="nemo green" data-bind="text: performance_pct, style: {color: color, background: background}">
+                                    +0,37%                                </span>
+                            </td>
+                        </tr>
+                                            <tr  id="Edom:44135,i:57602,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span id="57602_MATERLS" class="ins indicesSectorialName">
+                                    MATERLS                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span data-bind="text: price">2.692,85</span>
+                            </td>
+                            <td class="con-var">
+                                <span class="nemo red" data-bind="text: performance_pct, style: {color: color, background: background}">
+                                    -0,94%                                </span>
+                            </td>
+                        </tr>
+                                            <tr class="gris" id="Edom:51624,i:57656,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span id="57656_TELECOS" class="ins indicesSectorialName">
+                                    TELECOS                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span data-bind="text: price">1.484,04</span>
+                            </td>
+                            <td class="con-var">
+                                <span class="nemo red" data-bind="text: performance_pct, style: {color: color, background: background}">
+                                    -1,69%                                </span>
+                            </td>
+                        </tr>
+                                            <tr  id="Edom:58122,i:57605,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span id="57605_UTILS" class="ins indicesSectorialName">
+                                    UTILS                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span data-bind="text: price">1.742,06</span>
+                            </td>
+                            <td class="con-var">
+                                <span class="nemo red" data-bind="text: performance_pct, style: {color: color, background: background}">
+                                    -0,65%                                </span>
+                            </td>
+                        </tr>
+                                            <tr class="gris" id="Edom:63160,i:57638,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span id="57638_ENERGY" class="ins indicesSectorialName">
+                                    ENERGY                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span data-bind="text: price">811,72</span>
+                            </td>
+                            <td class="con-var">
+                                <span class="nemo red" data-bind="text: performance_pct, style: {color: color, background: background}">
+                                    -2,95%                                </span>
+                            </td>
+                        </tr>
+                                            <tr  id="Edom:70510,i:57623,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span id="57623_STAPLES" class="ins indicesSectorialName">
+                                    STAPLES                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span data-bind="text: price">1.627,96</span>
+                            </td>
+                            <td class="con-var">
+                                <span class="nemo red" data-bind="text: performance_pct, style: {color: color, background: background}">
+                                    -0,54%                                </span>
+                            </td>
+                        </tr>
+                                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12 px-0 text-center bg-custom-border font-indicadores">
+                Mayores Alzas            </div>
+            <div class="col-12 px-2 py-2" id="moduleIndicesTop">
+                <table class="table-striped" id="Edom:85848,i:indextop-10-3969,q:1,c:pushFilter">
+                    <thead>
+                    <tr>
+                        <th class="tabla-nombre">Nombre</th>
+                        <th class="tabla-puntos">Puntos</th>
+                        <th class="tabla-var">Var %</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbodyTop">
+                                        <tr class="gris">
+                        <td class="con-nombre">
+                            <span class="" id="TOP_notation_1" style="display: none;">4019</span>
+                            <span class="ins stockTop" title='SALFACORP' id="TOP_name_1">
+                                SALFACORP                            </span>
+                        </td>
+                        <td class="con-valor">
+                            <span class="off" id="TOP_price_1">
+                                1.280,00                            </span>
+                        </td>
+                        <td class="con-var">
+                            <span class="nemo" id="TOP_performance_1" style="display: none;">
+                                43,10%                            </span>
+                            <span class="green" id="TOP_pct_1">
+                                +3,48%                            </span>
+                        </td>
+                    </tr>
+                                        <tr >
+                        <td class="con-nombre">
+                            <span class="" id="TOP_notation_2" style="display: none;">4017</span>
+                            <span class="ins stockTop" title='CCU' id="TOP_name_2">
+                                CCU                            </span>
+                        </td>
+                        <td class="con-valor">
+                            <span class="off" id="TOP_price_2">
+                                5.285,00                            </span>
+                        </td>
+                        <td class="con-var">
+                            <span class="nemo" id="TOP_performance_2" style="display: none;">
+                                35,00%                            </span>
+                            <span class="green" id="TOP_pct_2">
+                                +0,67%                            </span>
+                        </td>
+                    </tr>
+                                        <tr class="gris">
+                        <td class="con-nombre">
+                            <span class="" id="TOP_notation_3" style="display: none;">3993</span>
+                            <span class="ins stockTop" title='AGUAS-A' id="TOP_name_3">
+                                AGUAS-A                            </span>
+                        </td>
+                        <td class="con-valor">
+                            <span class="off" id="TOP_price_3">
+                                326,00                            </span>
+                        </td>
+                        <td class="con-var">
+                            <span class="nemo" id="TOP_performance_3" style="display: none;">
+                                1,85%                            </span>
+                            <span class="green" id="TOP_pct_3">
+                                +0,57%                            </span>
+                        </td>
+                    </tr>
+                                        <tr >
+                        <td class="con-nombre">
+                            <span class="" id="TOP_notation_4" style="display: none;">50741</span>
+                            <span class="ins stockTop" title='ENELAM' id="TOP_name_4">
+                                ENELAM                            </span>
+                        </td>
+                        <td class="con-valor">
+                            <span class="off" id="TOP_price_4">
+                                83,25                            </span>
+                        </td>
+                        <td class="con-var">
+                            <span class="nemo" id="TOP_performance_4" style="display: none;">
+                                0,25%                            </span>
+                            <span class="green" id="TOP_pct_4">
+                                +0,30%                            </span>
+                        </td>
+                    </tr>
+                                        <tr class="gris">
+                        <td class="con-nombre">
+                            <span class="" id="TOP_notation_5" style="display: none;">4032</span>
+                            <span class="ins stockTop" title='IAM' id="TOP_name_5">
+                                IAM                            </span>
+                        </td>
+                        <td class="con-valor">
+                            <span class="off" id="TOP_price_5">
+                                929,94                            </span>
+                        </td>
+                        <td class="con-var">
+                            <span class="nemo" id="TOP_performance_5" style="display: none;">
+                                2,20%                            </span>
+                            <span class="green" id="TOP_pct_5">
+                                +0,24%                            </span>
+                        </td>
+                    </tr>
+                                        <tr >
+                        <td class="con-nombre">
+                            <span class="" id="TOP_notation_6" style="display: none;">3989</span>
+                            <span class="ins stockTop" title='CAP' id="TOP_name_6">
+                                CAP                            </span>
+                        </td>
+                        <td class="con-valor">
+                            <span class="off" id="TOP_price_6">
+                                5.283,40                            </span>
+                        </td>
+                        <td class="con-var">
+                            <span class="nemo" id="TOP_performance_6" style="display: none;">
+                                3,40%                            </span>
+                            <span class="green" id="TOP_pct_6">
+                                +0,06%                            </span>
+                        </td>
+                    </tr>
+                                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+//TOP
+push.template.setTemplate('indextop', 'tbodyTop', '<tr>\
+  <td class="con-nombre"><span class="ins stockTop" onclick="topflopIndicesClickNotation({{id_instrument}}, \'{{shortName}}\');">{{shortName}}</span></td>\
+  <td class="con-valor">{{price}}</td>\
+  <td class="con-var"><span class="{{fill}}">{{performance_pct}}%</span></td>\
+  </tr>');
+
+var idExchangeTopFlop='SGO';
+$(document).ready(function(){
+	$(".stockTop").click(function(e){
+		topflopIndicesClickNotation($(this).prev().html(),$(this).text());
+	});
+});//END READY
+</script>
+
+            
+<div class="col-12 col-md-6 col-lg-3">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12 px-0 text-center bg-custom-border font-indicadores">
+                Mayores Bajas            </div>
+            <div class="col-12 px-2 py-2" id="moduleIndicesFlop">
+                <table class="table-striped" id="Edom:118859,i:indexflop-10-3969,q:1,c:pushFilter">
+                    <thead>
+                    <tr>
+                        <th class="tabla-nombre">Nombre</th>
+                        <th class="tabla-puntos">Puntos</th>
+                        <th class="tabla-var">Var %</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbodyFlop">
+                                        <tr>
+                        <td class="con-nombre">
+                            <span class="" id="FLOP_notation_1" style="display: none;">3997</span>
+                            <span class="ins stockFlop" title='COPEC' id="FLOP_name_1">
+                                COPEC                            </span>
+                        </td>
+                        <td class="con-valor">
+                            <span class="off" id="FLOP_price_1">
+                                6.350,00                            </span>
+                        </td>
+                        <td class="con-var">
+                            <span class="nemo" id="FLOP_performance_1" style="display: none;">-170,40%</span>
+                            <span class="red" id="FLOP_pct_1">-2,61%</span>
+                        </td>
+                    </tr>
+                                                <tr>
+                        <td class="con-nombre">
+                            <span class="" id="FLOP_notation_2" style="display: none;">57347</span>
+                            <span class="ins stockFlop" title='MALLPLAZA' id="FLOP_name_2">
+                                MALLPLAZA                            </span>
+                        </td>
+                        <td class="con-valor">
+                            <span class="off" id="FLOP_price_2">
+                                3.550,10                            </span>
+                        </td>
+                        <td class="con-var">
+                            <span class="nemo" id="FLOP_performance_2" style="display: none;">-91,90%</span>
+                            <span class="red" id="FLOP_pct_2">-2,52%</span>
+                        </td>
+                    </tr>
+                                                <tr>
+                        <td class="con-nombre">
+                            <span class="" id="FLOP_notation_3" style="display: none;">4031</span>
+                            <span class="ins stockFlop" title='PARAUCO' id="FLOP_name_3">
+                                PARAUCO                            </span>
+                        </td>
+                        <td class="con-valor">
+                            <span class="off" id="FLOP_price_3">
+                                3.670,10                            </span>
+                        </td>
+                        <td class="con-var">
+                            <span class="nemo" id="FLOP_performance_3" style="display: none;">-90,90%</span>
+                            <span class="red" id="FLOP_pct_3">-2,42%</span>
+                        </td>
+                    </tr>
+                                                <tr>
+                        <td class="con-nombre">
+                            <span class="" id="FLOP_notation_4" style="display: none;">77447</span>
+                            <span class="ins stockFlop" title='ITAUCL' id="FLOP_name_4">
+                                ITAUCL                            </span>
+                        </td>
+                        <td class="con-valor">
+                            <span class="off" id="FLOP_price_4">
+                                23.290,00                            </span>
+                        </td>
+                        <td class="con-var">
+                            <span class="nemo" id="FLOP_performance_4" style="display: none;">-547,00%</span>
+                            <span class="red" id="FLOP_pct_4">-2,29%</span>
+                        </td>
+                    </tr>
+                                                <tr>
+                        <td class="con-nombre">
+                            <span class="" id="FLOP_notation_5" style="display: none;">3990</span>
+                            <span class="ins stockFlop" title='FALABELLA' id="FLOP_name_5">
+                                FALABELLA                            </span>
+                        </td>
+                        <td class="con-valor">
+                            <span class="off" id="FLOP_price_5">
+                                6.306,00                            </span>
+                        </td>
+                        <td class="con-var">
+                            <span class="nemo" id="FLOP_performance_5" style="display: none;">-143,90%</span>
+                            <span class="red" id="FLOP_pct_5">-2,23%</span>
+                        </td>
+                    </tr>
+                                                <tr>
+                        <td class="con-nombre">
+                            <span class="" id="FLOP_notation_6" style="display: none;">3998</span>
+                            <span class="ins stockFlop" title='CENCOSUD' id="FLOP_name_6">
+                                CENCOSUD                            </span>
+                        </td>
+                        <td class="con-valor">
+                            <span class="off" id="FLOP_price_6">
+                                1.948,90                            </span>
+                        </td>
+                        <td class="con-var">
+                            <span class="nemo" id="FLOP_performance_6" style="display: none;">-41,10%</span>
+                            <span class="red" id="FLOP_pct_6">-2,07%</span>
+                        </td>
+                    </tr>
+                                                <tr>
+                        <td class="con-nombre">
+                            <span class="" id="FLOP_notation_7" style="display: none;">4010</span>
+                            <span class="ins stockFlop" title='ECL' id="FLOP_name_7">
+                                ECL                            </span>
+                        </td>
+                        <td class="con-valor">
+                            <span class="off" id="FLOP_price_7">
+                                1.885,00                            </span>
+                        </td>
+                        <td class="con-var">
+                            <span class="nemo" id="FLOP_performance_7" style="display: none;">-30,00%</span>
+                            <span class="red" id="FLOP_pct_7">-1,57%</span>
+                        </td>
+                    </tr>
+                                                <tr>
+                        <td class="con-nombre">
+                            <span class="" id="FLOP_notation_8" style="display: none;">51638</span>
+                            <span class="ins stockFlop" title='SMU' id="FLOP_name_8">
+                                SMU                            </span>
+                        </td>
+                        <td class="con-valor">
+                            <span class="off" id="FLOP_price_8">
+                                119,50                            </span>
+                        </td>
+                        <td class="con-var">
+                            <span class="nemo" id="FLOP_performance_8" style="display: none;">-1,50%</span>
+                            <span class="red" id="FLOP_pct_8">-1,24%</span>
+                        </td>
+                    </tr>
+                                                <tr>
+                        <td class="con-nombre">
+                            <span class="" id="FLOP_notation_9" style="display: none;">60837</span>
+                            <span class="ins stockFlop" title='CENCOMALLS' id="FLOP_name_9">
+                                CENCOMALLS                            </span>
+                        </td>
+                        <td class="con-valor">
+                            <span class="off" id="FLOP_price_9">
+                                2.257,10                            </span>
+                        </td>
+                        <td class="con-var">
+                            <span class="nemo" id="FLOP_performance_9" style="display: none;">-27,90%</span>
+                            <span class="red" id="FLOP_pct_9">-1,22%</span>
+                        </td>
+                    </tr>
+                                                <tr>
+                        <td class="con-nombre">
+                            <span class="" id="FLOP_notation_10" style="display: none;">4046</span>
+                            <span class="ins stockFlop" title='CMPC' id="FLOP_name_10">
+                                CMPC                            </span>
+                        </td>
+                        <td class="con-valor">
+                            <span class="off" id="FLOP_price_10">
+                                957,00                            </span>
+                        </td>
+                        <td class="con-var">
+                            <span class="nemo" id="FLOP_performance_10" style="display: none;">-11,00%</span>
+                            <span class="red" id="FLOP_pct_10">-1,14%</span>
+                        </td>
+                    </tr>
+                                                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+//FLOP
+push.template.setTemplate('indexflop', 'tbodyFlop', '<tr>\
+  <td class="con-nombre"><span class="ins stockFlop" onclick="topflopIndicesClickNotation({{id_instrument}}, \'{{shortName}}\');">{{shortName}}</span></td>\
+  <td class="con-valor">{{price}}</td>\
+  <td class="con-var"><span class="{{fill}}">{{performance_pct}}%</span></td>\
+  </tr>');
+
+var idExchangeTopFlop='SGO';
+$(document).ready(function(){
+	//método que envía notation y nombre instrumento al gráfico
+  $(".stockFlop").click(function () {
+		topflopIndicesClickNotation($(this).prev().html(),$(this).text());
+  });
+});//END READY
+</script>
+
+            
+<div class="col-12 col-md-6 col-lg-3">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12 px-0 text-center bg-custom-border font-indicadores">
+                M&aacute;s Transadas            </div>
+            <div class="col-12 px-2 py-2" id="moduleIndicesTopFlop">
+                <table class="table-striped" id="Edom:113708,i:indextopflop-10-3969,q:1,c:pushFilter">
+                    <thead>
+                    <tr>
+                        <th class="tabla-nombre">Nombre</th>
+                        <th class="tabla-puntos">Puntos</th>
+                        <th class="tabla-var">Var %</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbodyTopflop">
+                                                <tr class="gris">
+                                <td class="con-nombre">
+                                    <span class="" id="TOP_FLOP_notation_1" style="display: none;">
+                                        52141                                    </span>
+                                    <span class="ins stockTopFlop" title='LTM' id="TOP_FLOP_name_1">
+                                        LTM                                    </span>
+                                </td>
+                                <td class="con-valor">
+                                    <span class="off" id="TOP_FLOP_price_1">
+                                        25,14                                    </span>
+                                </td>
+                                <td class="con-var">
+                                    <span class="nemo" id="TOP_FLOP_performance_1" style="display: none;">-0,11%</span>
+                                                                        <span class="red" id="TOP_FLOP_pct_1">
+                                        -0,44%                                    </span>
+                                </td>
+                            </tr>
+                                                        <tr >
+                                <td class="con-nombre">
+                                    <span class="" id="TOP_FLOP_notation_2" style="display: none;">
+                                        4000                                    </span>
+                                    <span class="ins stockTopFlop" title='SQM-B' id="TOP_FLOP_name_2">
+                                        SQM-B                                    </span>
+                                </td>
+                                <td class="con-valor">
+                                    <span class="off" id="TOP_FLOP_price_2">
+                                        63.580,00                                    </span>
+                                </td>
+                                <td class="con-var">
+                                    <span class="nemo" id="TOP_FLOP_performance_2" style="display: none;">-621,00%</span>
+                                                                        <span class="red" id="TOP_FLOP_pct_2">
+                                        -0,97%                                    </span>
+                                </td>
+                            </tr>
+                                                        <tr class="gris">
+                                <td class="con-nombre">
+                                    <span class="" id="TOP_FLOP_notation_3" style="display: none;">
+                                        4008                                    </span>
+                                    <span class="ins stockTopFlop" title='CHILE' id="TOP_FLOP_name_3">
+                                        CHILE                                    </span>
+                                </td>
+                                <td class="con-valor">
+                                    <span class="off" id="TOP_FLOP_price_3">
+                                        200,70                                    </span>
+                                </td>
+                                <td class="con-var">
+                                    <span class="nemo" id="TOP_FLOP_performance_3" style="display: none;">-1,66%</span>
+                                                                        <span class="red" id="TOP_FLOP_pct_3">
+                                        -0,82%                                    </span>
+                                </td>
+                            </tr>
+                                                        <tr >
+                                <td class="con-nombre">
+                                    <span class="" id="TOP_FLOP_notation_4" style="display: none;">
+                                        3990                                    </span>
+                                    <span class="ins stockTopFlop" title='FALABELLA' id="TOP_FLOP_name_4">
+                                        FALABELLA                                    </span>
+                                </td>
+                                <td class="con-valor">
+                                    <span class="off" id="TOP_FLOP_price_4">
+                                        6.306,00                                    </span>
+                                </td>
+                                <td class="con-var">
+                                    <span class="nemo" id="TOP_FLOP_performance_4" style="display: none;">-143,90%</span>
+                                                                        <span class="red" id="TOP_FLOP_pct_4">
+                                        -2,23%                                    </span>
+                                </td>
+                            </tr>
+                                                        <tr class="gris">
+                                <td class="con-nombre">
+                                    <span class="" id="TOP_FLOP_notation_5" style="display: none;">
+                                        4038                                    </span>
+                                    <span class="ins stockTopFlop" title='BCI' id="TOP_FLOP_name_5">
+                                        BCI                                    </span>
+                                </td>
+                                <td class="con-valor">
+                                    <span class="off" id="TOP_FLOP_price_5">
+                                        64.350,00                                    </span>
+                                </td>
+                                <td class="con-var">
+                                    <span class="nemo" id="TOP_FLOP_performance_5" style="display: none;">-449,00%</span>
+                                                                        <span class="red" id="TOP_FLOP_pct_5">
+                                        -0,69%                                    </span>
+                                </td>
+                            </tr>
+                                                        <tr >
+                                <td class="con-nombre">
+                                    <span class="" id="TOP_FLOP_notation_6" style="display: none;">
+                                        4009                                    </span>
+                                    <span class="ins stockTopFlop" title='BSANTANDER' id="TOP_FLOP_name_6">
+                                        BSANTANDER                                    </span>
+                                </td>
+                                <td class="con-valor">
+                                    <span class="off" id="TOP_FLOP_price_6">
+                                        82,19                                    </span>
+                                </td>
+                                <td class="con-var">
+                                    <span class="nemo" id="TOP_FLOP_performance_6" style="display: none;">-0,81%</span>
+                                                                        <span class="red" id="TOP_FLOP_pct_6">
+                                        -0,98%                                    </span>
+                                </td>
+                            </tr>
+                                                        <tr class="gris">
+                                <td class="con-nombre">
+                                    <span class="" id="TOP_FLOP_notation_7" style="display: none;">
+                                        3997                                    </span>
+                                    <span class="ins stockTopFlop" title='COPEC' id="TOP_FLOP_name_7">
+                                        COPEC                                    </span>
+                                </td>
+                                <td class="con-valor">
+                                    <span class="off" id="TOP_FLOP_price_7">
+                                        6.350,00                                    </span>
+                                </td>
+                                <td class="con-var">
+                                    <span class="nemo" id="TOP_FLOP_performance_7" style="display: none;">-170,40%</span>
+                                                                        <span class="red" id="TOP_FLOP_pct_7">
+                                        -2,61%                                    </span>
+                                </td>
+                            </tr>
+                                                        <tr >
+                                <td class="con-nombre">
+                                    <span class="" id="TOP_FLOP_notation_8" style="display: none;">
+                                        77447                                    </span>
+                                    <span class="ins stockTopFlop" title='ITAUCL' id="TOP_FLOP_name_8">
+                                        ITAUCL                                    </span>
+                                </td>
+                                <td class="con-valor">
+                                    <span class="off" id="TOP_FLOP_price_8">
+                                        23.290,00                                    </span>
+                                </td>
+                                <td class="con-var">
+                                    <span class="nemo" id="TOP_FLOP_performance_8" style="display: none;">-547,00%</span>
+                                                                        <span class="red" id="TOP_FLOP_pct_8">
+                                        -2,29%                                    </span>
+                                </td>
+                            </tr>
+                                                        <tr class="gris">
+                                <td class="con-nombre">
+                                    <span class="" id="TOP_FLOP_notation_9" style="display: none;">
+                                        4020                                    </span>
+                                    <span class="ins stockTopFlop" title='ANDINA-B' id="TOP_FLOP_name_9">
+                                        ANDINA-B                                    </span>
+                                </td>
+                                <td class="con-valor">
+                                    <span class="off" id="TOP_FLOP_price_9">
+                                        4.910,00                                    </span>
+                                </td>
+                                <td class="con-var">
+                                    <span class="nemo" id="TOP_FLOP_performance_9" style="display: none;">-40,10%</span>
+                                                                        <span class="red" id="TOP_FLOP_pct_9">
+                                        -0,81%                                    </span>
+                                </td>
+                            </tr>
+                                                        <tr >
+                                <td class="con-nombre">
+                                    <span class="" id="TOP_FLOP_notation_10" style="display: none;">
+                                        3998                                    </span>
+                                    <span class="ins stockTopFlop" title='CENCOSUD' id="TOP_FLOP_name_10">
+                                        CENCOSUD                                    </span>
+                                </td>
+                                <td class="con-valor">
+                                    <span class="off" id="TOP_FLOP_price_10">
+                                        1.948,90                                    </span>
+                                </td>
+                                <td class="con-var">
+                                    <span class="nemo" id="TOP_FLOP_performance_10" style="display: none;">-41,10%</span>
+                                                                        <span class="red" id="TOP_FLOP_pct_10">
+                                        -2,07%                                    </span>
+                                </td>
+                            </tr>
+                                                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+//TOPFLOP
+push.template.setTemplate('indextopflop', 'tbodyTopflop', '<tr>\
+  <td class="con-nombre"><span class="ins stockTopFlop" onclick="topflopIndicesClickNotation({{id_instrument}}, \'{{shortName}}\');">{{shortName}}</span></td>\
+  <td class="con-valor">{{price}}</td>\
+  <td class="con-var"><span class="{{fill}}">{{performance_pct}}%</span></td>\
+  </tr>');
+
+var idExchangeTopFlop='SGO';
+$(document).ready(function(){
+	//método que envía notation y nombre instrumento al gráfico
+	$(".stockTopFlop").click(function (){
+		topflopIndicesClickNotation($(this).prev().html(),$(this).text());
+	});
+});//END READY
+</script>
+        </div>
+    </div>
+    <div class="col-12 font-min px-0 text-gris">
+        • Indices Sectoriales, Mayores Alzas, Mayores Bajas y Más Transadas en Tiempo Real.
+    </div>
+
+    <!-- Acciones IPSA -->
+    <!--  Contenedor Modulo ConstituentsList -->
+<script type="text/javascript">
+//obtengo un arreglo JSON con los parametros preconfigurados
+var jsonConstituents = [{"idInstrument":"3969","fkStock":"3993","fkIndex":"3969","pkInstrument":"3993","weightParticipation":"0.0000000000","isin":null,"symbol":"AGUAS-A","name":"AGUAS ANDINAS S.A., SERIE A","shortName":"AGUAS-A","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.AGUAS-A.BCS","state":null},{"idInstrument":"3969","fkStock":"4008","fkIndex":"3969","pkInstrument":"4008","weightParticipation":"0.0000000000","isin":null,"symbol":"CHILE","name":"BANCO DE CHILE","shortName":"CHILE","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.CHILE.BCS","state":null},{"idInstrument":"3969","fkStock":"4038","fkIndex":"3969","pkInstrument":"4038","weightParticipation":"0.0000000000","isin":null,"symbol":"BCI","name":"BANCO DE CREDITO E INVERSIONES","shortName":"BCI","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.BCI.BCS","state":null},{"idInstrument":"3969","fkStock":"77447","fkIndex":"3969","pkInstrument":"77447","weightParticipation":"0.0000000000","isin":null,"symbol":"ITAUCL","name":"BANCO ITAU CHILE","shortName":"ITAUCL","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.ITAUCL.BCS","state":null},{"idInstrument":"3969","fkStock":"4009","fkIndex":"3969","pkInstrument":"4009","weightParticipation":"0.0000000000","isin":null,"symbol":"BSANTANDER","name":"BANCO SANTANDER-CHILE","shortName":"BSANTANDER","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.BSANTANDER.BCS","state":null},{"idInstrument":"3969","fkStock":"3989","fkIndex":"3969","pkInstrument":"3989","weightParticipation":"0.0000000000","isin":null,"symbol":"CAP","name":"CAP S.A.","shortName":"CAP","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.CAP.BCS","state":null},{"idInstrument":"3969","fkStock":"3998","fkIndex":"3969","pkInstrument":"3998","weightParticipation":"0.0000000000","isin":null,"symbol":"CENCOSUD","name":"CENCOSUD S.A.","shortName":"CENCOSUD","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.CENCOSUD.BCS","state":null},{"idInstrument":"3969","fkStock":"60837","fkIndex":"3969","pkInstrument":"60837","weightParticipation":"0.0000000000","isin":null,"symbol":"CENCOMALLS","name":"CENCOSUD SHOPPING S.A.","shortName":"CENCOMALLS","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.CENCOMALLS.BCS","state":null},{"idInstrument":"3969","fkStock":"4021","fkIndex":"3969","pkInstrument":"4021","weightParticipation":"0.0000000000","isin":null,"symbol":"COLBUN","name":"COLBUN S.A.","shortName":"COLBUN","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.COLBUN.BCS","state":null},{"idInstrument":"3969","fkStock":"4017","fkIndex":"3969","pkInstrument":"4017","weightParticipation":"0.0000000000","isin":null,"symbol":"CCU","name":"COMPANIA CERVECERIAS UNIDAS S.A.","shortName":"CCU","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.CCU.BCS","state":null},{"idInstrument":"3969","fkStock":"4015","fkIndex":"3969","pkInstrument":"4015","weightParticipation":"0.0000000000","isin":null,"symbol":"VAPORES","name":"COMPANIA SUD AMERICANA DE VAPORES S.A.","shortName":"VAPORES","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.VAPORES.BCS","state":null},{"idInstrument":"3969","fkStock":"4020","fkIndex":"3969","pkInstrument":"4020","weightParticipation":"0.0000000000","isin":null,"symbol":"ANDINA-B","name":"EMBOTELLADORA ANDINA S.A. SERIE B","shortName":"ANDINA-B","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.ANDINA-B.BCS","state":null},{"idInstrument":"3969","fkStock":"4002","fkIndex":"3969","pkInstrument":"4002","weightParticipation":"0.0000000000","isin":null,"symbol":"ENTEL","name":"EMP. NACIONAL DE TELECOMUNICACIONES S.A.","shortName":"ENTEL","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.ENTEL.BCS","state":null},{"idInstrument":"3969","fkStock":"4046","fkIndex":"3969","pkInstrument":"4046","weightParticipation":"0.0000000000","isin":null,"symbol":"CMPC","name":"EMPRESAS CMPC S.A.","shortName":"CMPC","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.CMPC.BCS","state":null},{"idInstrument":"3969","fkStock":"3997","fkIndex":"3969","pkInstrument":"3997","weightParticipation":"0.0000000000","isin":null,"symbol":"COPEC","name":"EMPRESAS COPEC S.A.","shortName":"COPEC","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.COPEC.BCS","state":null},{"idInstrument":"3969","fkStock":"50741","fkIndex":"3969","pkInstrument":"50741","weightParticipation":"0.0000000000","isin":null,"symbol":"ENELAM","name":"ENEL AMERICAS S.A.","shortName":"ENELAM","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.ENELAM.BCS","state":null},{"idInstrument":"3969","fkStock":"50582","fkIndex":"3969","pkInstrument":"50582","weightParticipation":"0.0000000000","isin":null,"symbol":"ENELCHILE","name":"ENEL CHILE S.A.","shortName":"ENELCHILE","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.ENELCHILE.BCS","state":null},{"idInstrument":"3969","fkStock":"4010","fkIndex":"3969","pkInstrument":"4010","weightParticipation":"0.0000000000","isin":null,"symbol":"ECL","name":"ENGIE ENERGIA CHILE S.A.","shortName":"ECL","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.ECL.BCS","state":null},{"idInstrument":"3969","fkStock":"3990","fkIndex":"3969","pkInstrument":"3990","weightParticipation":"0.0000000000","isin":null,"symbol":"FALABELLA","name":"FALABELLA S.A.","shortName":"FALABELLA","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.FALABELLA.BCS","state":null},{"idInstrument":"3969","fkStock":"4032","fkIndex":"3969","pkInstrument":"4032","weightParticipation":"0.0000000000","isin":null,"symbol":"IAM","name":"INVERSIONES AGUAS METROPOLITANAS S.A.","shortName":"IAM","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.IAM.BCS","state":null},{"idInstrument":"3969","fkStock":"3999","fkIndex":"3969","pkInstrument":"3999","weightParticipation":"0.0000000000","isin":null,"symbol":"ILC","name":"INVERSIONES LA CONSTRUCCION S.A.","shortName":"ILC","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.ILC.BCS","state":null},{"idInstrument":"3969","fkStock":"52141","fkIndex":"3969","pkInstrument":"52141","weightParticipation":"0.0000000000","isin":null,"symbol":"LTM","name":"LATAM AIRLINES GROUP S.A.","shortName":"LTM","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.LTM.BCS","state":null},{"idInstrument":"3969","fkStock":"4031","fkIndex":"3969","pkInstrument":"4031","weightParticipation":"0.0000000000","isin":null,"symbol":"PARAUCO","name":"PARQUE ARAUCO S.A.","shortName":"PARAUCO","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.PARAUCO.BCS","state":null},{"idInstrument":"3969","fkStock":"57347","fkIndex":"3969","pkInstrument":"57347","weightParticipation":null,"isin":null,"symbol":"MALLPLAZA","name":"PLAZA S.A.","shortName":"MALLPLAZA","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.MALLPLAZA.BCS","state":null},{"idInstrument":"3969","fkStock":"4082","fkIndex":"3969","pkInstrument":"4082","weightParticipation":"0.0000000000","isin":null,"symbol":"QUINENCO","name":"QUINENCO S.A.","shortName":"QUINENCO","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.QUINENCO.BCS","state":null},{"idInstrument":"3969","fkStock":"4025","fkIndex":"3969","pkInstrument":"4025","weightParticipation":"0.0000000000","isin":null,"symbol":"RIPLEY","name":"RIPLEY CORP S.A.","shortName":"RIPLEY","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.RIPLEY.BCS","state":null},{"idInstrument":"3969","fkStock":"4019","fkIndex":"3969","pkInstrument":"4019","weightParticipation":"0.0000000000","isin":null,"symbol":"SALFACORP","name":"SALFACORP S.A.","shortName":"SALFACORP","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.SALFACORP.BCS","state":null},{"idInstrument":"3969","fkStock":"51638","fkIndex":"3969","pkInstrument":"51638","weightParticipation":null,"isin":null,"symbol":"SMU","name":"SMU S.A.","shortName":"SMU","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.SMU.BCS","state":null},{"idInstrument":"3969","fkStock":"4000","fkIndex":"3969","pkInstrument":"4000","weightParticipation":"0.0000000000","isin":null,"symbol":"SQM-B","name":"SOC QUIMICA MINERA DE CHILE S.A. SERIE B","shortName":"SQM-B","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.SQM-B.BCS","state":null},{"idInstrument":"3969","fkStock":"4045","fkIndex":"3969","pkInstrument":"4045","weightParticipation":"0.0000000000","isin":null,"symbol":"CONCHATORO","name":"VINA CONCHA Y TORO S.A.","shortName":"CONCHATORO","fkCountry":"2","fkExchange":"2","fkSubsector":"1","fkCurrencyType":"2","fkInstrumentType":"1","codeInstrument":"STO.CONCHATORO.BCS","state":null}];
+$(document).ready(function(){
+	$('.constituentsNotation').click(function(){
+		constituentsListClickNotation($(this).attr('id'),$(this).text());
+	});
+});
+
+function changePaginator(currentPage, totalPage){
+	$.ajax({
+		type: "POST",
+		url: "https://scotiabankchile.finmarketslive.cl/www/constituentslist/paginator.php",
+		data: 'current='+currentPage+'&total='+totalPage,
+		success: function(txt){
+			$('#ConstituentsPaginator').html(txt);
+		}
+	});
+}
+
+function constituentsListChangeNotation(idNotation){
+	$.fx.off = true;
+	$('#tb_constituents').fadeTo("slow", 0.4);
+	//cargo nueva configuracion de parametros para la llamada al MDG
+	var blocksize = jsonConstituents.defect.BLOCKSIZE;
+	var lang = jsonConstituents.defect.LANG;
+	var idNotation = idNotation;
+	var offset = 0;
+	$.ajax({
+		type: "POST",
+		url: "https://scotiabankchile.finmarketslive.cl/www/constituentslist/constituents.php",
+		data: 'blocksize='+blocksize+'&lang='+lang+'&notation='+idNotation+'&offset='+offset,
+		success: function(txt){
+			$('#constituentsList').html(txt);
+		}
+	});
+}
+
+/**
+ * Funcion encargada de obtener los registros solicitados de acuerdo al paginador
+ */
+function changePage(page){
+	$.fx.off = true;
+	$('#tb_constituents').fadeTo("slow", 0.4);
+
+	//cargo nueva configuracion de parametros para la llamada al MDG
+	var blocksize = jsonConstituents.defect.BLOCKSIZE;
+	var lang = jsonConstituents.defect.LANG;
+	var idNotation = jsonConstituents.defect.ID_NOTATION;
+	var offset = page-1;
+	$.ajax({
+		type: "POST",
+		url: "https://scotiabankchile.finmarketslive.cl/www/constituentslist/constituents.php",
+		data: 'blocksize='+blocksize+'&lang='+lang+'&notation='+idNotation+'&offset='+offset,
+		success: function(txt){
+			$('#constituentsList').html(txt);
+		}
+	});
+}
+</script>
+
+<div class="col-12 px-0 text-center bg-custom-border my-4 font-indicadores">Acciones IPSA</div>
+
+<div class="row">
+        <div class="col-12 col-md-6 col-lg-3">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12 px-2 py-2">
+                    <table class="table-striped">
+                        <thead>
+                        <tr>
+                            <th class="tabla-nombre">Nombre</th>
+                            <th class="tabla-puntos">Puntos</th>
+                            <th class="tabla-var">Var %</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                                                <tr class="gris" id="Edom:77370,i:3993,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="3993" title="AGUAS-A">
+                                    AGUAS-A                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    326,00                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo green">
+								    +0,57%							    </span>
+                            </td>
+                        </tr>
+                                                <tr  id="Edom:82832,i:4008,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="4008" title="CHILE">
+                                    CHILE                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    200,70                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -0,82%							    </span>
+                            </td>
+                        </tr>
+                                                <tr class="gris" id="Edom:85561,i:4038,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="4038" title="BCI">
+                                    BCI                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    64.350,00                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -0,69%							    </span>
+                            </td>
+                        </tr>
+                                                <tr  id="Edom:93186,i:77447,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="77447" title="ITAUCL">
+                                    ITAUCL                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    23.290,00                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -2,29%							    </span>
+                            </td>
+                        </tr>
+                                                <tr class="gris" id="Edom:97299,i:4009,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="4009" title="BSANTANDER">
+                                    BSANTANDER                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    82,19                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -0,98%							    </span>
+                            </td>
+                        </tr>
+                                                <tr  id="Edom:104960,i:3989,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="3989" title="CAP">
+                                    CAP                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    5.283,40                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo green">
+								    +0,06%							    </span>
+                            </td>
+                        </tr>
+                                                <tr class="gris" id="Edom:109956,i:3998,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="3998" title="CENCOSUD">
+                                    CENCOSUD                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    1.948,90                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -2,07%							    </span>
+                            </td>
+                        </tr>
+                                                </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="col-12 col-md-6 col-lg-3">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12 px-2 py-2">
+                    <table class="table-striped">
+                        <thead>
+                        <tr>
+                            <th class="tabla-nombre">Nombre</th>
+                            <th class="tabla-puntos">Puntos</th>
+                            <th class="tabla-var">Var %</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                                                <tr class="gris" id="Edom:120780,i:60837,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="60837" title="CENCOMALLS">
+                                    CENCOMALLS                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    2.257,10                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -1,22%							    </span>
+                            </td>
+                        </tr>
+                                                <tr  id="Edom:117622,i:4021,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="4021" title="COLBUN">
+                                    COLBUN                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    146,00                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -1,02%							    </span>
+                            </td>
+                        </tr>
+                                                <tr class="gris" id="Edom:131424,i:4017,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="4017" title="CCU">
+                                    CCU                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    5.285,00                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo green">
+								    +0,67%							    </span>
+                            </td>
+                        </tr>
+                                                <tr  id="Edom:136775,i:4015,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="4015" title="VAPORES">
+                                    VAPORES                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    50,15                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -0,30%							    </span>
+                            </td>
+                        </tr>
+                                                <tr class="gris" id="Edom:140894,i:4020,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="4020" title="ANDINA-B">
+                                    ANDINA-B                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    4.910,00                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -0,81%							    </span>
+                            </td>
+                        </tr>
+                                                <tr  id="Edom:139266,i:4002,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="4002" title="ENTEL">
+                                    ENTEL                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    3.963,30                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -0,42%							    </span>
+                            </td>
+                        </tr>
+                                                <tr class="gris" id="Edom:152012,i:4046,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="4046" title="CMPC">
+                                    CMPC                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    957,00                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -1,14%							    </span>
+                            </td>
+                        </tr>
+                                                </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="col-12 col-md-6 col-lg-3">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12 px-2 py-2">
+                    <table class="table-striped">
+                        <thead>
+                        <tr>
+                            <th class="tabla-nombre">Nombre</th>
+                            <th class="tabla-puntos">Puntos</th>
+                            <th class="tabla-var">Var %</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                                                <tr class="gris" id="Edom:156977,i:3997,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="3997" title="COPEC">
+                                    COPEC                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    6.350,00                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -2,61%							    </span>
+                            </td>
+                        </tr>
+                                                <tr  id="Edom:150600,i:50741,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="50741" title="ENELAM">
+                                    ENELAM                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    83,25                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo green">
+								    +0,30%							    </span>
+                            </td>
+                        </tr>
+                                                <tr class="gris" id="Edom:156643,i:50582,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="50582" title="ENELCHILE">
+                                    ENELCHILE                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    82,11                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo off">
+								    0,00%							    </span>
+                            </td>
+                        </tr>
+                                                <tr  id="Edom:171520,i:4010,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="4010" title="ECL">
+                                    ECL                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    1.885,00                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -1,57%							    </span>
+                            </td>
+                        </tr>
+                                                <tr class="gris" id="Edom:167574,i:3990,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="3990" title="FALABELLA">
+                                    FALABELLA                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    6.306,00                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -2,23%							    </span>
+                            </td>
+                        </tr>
+                                                <tr  id="Edom:182274,i:4032,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="4032" title="IAM">
+                                    IAM                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    929,94                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo green">
+								    +0,24%							    </span>
+                            </td>
+                        </tr>
+                                                <tr class="gris" id="Edom:183855,i:3999,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="3999" title="ILC">
+                                    ILC                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    24.800,00                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -0,80%							    </span>
+                            </td>
+                        </tr>
+                                                </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="col-12 col-md-6 col-lg-3">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12 px-2 py-2">
+                    <table class="table-striped">
+                        <thead>
+                        <tr>
+                            <th class="tabla-nombre">Nombre</th>
+                            <th class="tabla-puntos">Puntos</th>
+                            <th class="tabla-var">Var %</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                                                <tr class="gris" id="Edom:192960,i:52141,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="52141" title="LTM">
+                                    LTM                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    25,14                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -0,44%							    </span>
+                            </td>
+                        </tr>
+                                                <tr  id="Edom:188404,i:4031,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="4031" title="PARAUCO">
+                                    PARAUCO                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    3.670,10                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -2,42%							    </span>
+                            </td>
+                        </tr>
+                                                <tr class="gris" id="Edom:206948,i:57347,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="57347" title="MALLPLAZA">
+                                    MALLPLAZA                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    3.550,10                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -2,52%							    </span>
+                            </td>
+                        </tr>
+                                                <tr  id="Edom:195390,i:4082,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="4082" title="QUINENCO">
+                                    QUINENCO                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    4.758,00                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -0,96%							    </span>
+                            </td>
+                        </tr>
+                                                <tr class="gris" id="Edom:219680,i:4025,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="4025" title="RIPLEY">
+                                    RIPLEY                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    452,55                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -0,54%							    </span>
+                            </td>
+                        </tr>
+                                                <tr  id="Edom:222056,i:4019,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="4019" title="SALFACORP">
+                                    SALFACORP                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    1.280,00                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo green">
+								    +3,48%							    </span>
+                            </td>
+                        </tr>
+                                                <tr class="gris" id="Edom:211806,i:51638,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="51638" title="SMU">
+                                    SMU                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    119,50                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -1,24%							    </span>
+                            </td>
+                        </tr>
+                                                </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="col-12 col-md-6 col-lg-3">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12 px-2 py-2">
+                    <table class="table-striped">
+                        <thead>
+                        <tr>
+                            <th class="tabla-nombre">Nombre</th>
+                            <th class="tabla-puntos">Puntos</th>
+                            <th class="tabla-var">Var %</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                                                <tr class="gris" id="Edom:230867,i:4000,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="4000" title="SQM-B">
+                                    SQM-B                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    63.580,00                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -0,97%							    </span>
+                            </td>
+                        </tr>
+                                                <tr  id="Edom:233596,i:4045,q:1,c:pushFilter">
+                            <td class="con-nombre">
+                                <span class="ins constituentsNotation" id="4045" title="CONCHATORO">
+                                    CONCHATORO                                </span>
+                            </td>
+                            <td class="con-valor">
+                                <span class="off" data-bind="text: price">
+                                    903,36                                </span>
+                            </td>
+                            <td class="con-var">
+                                <span data-bind="text: performance_pct, style: {color: color, background: background}" class="nemo red">
+								    -0,98%							    </span>
+                            </td>
+                        </tr>
+                                                </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="row mt-3 fuente-footer text-gris text-center text-md-left">
+        <div class="col-12 col-md-6 font-min text-gris  mb-2 mb-md-0">
+            • Acciones del IPSA con desfase de 20 minutos.
+        </div>
+        <div class="col-12 col-md-6 text-center text-md-right">
+            <div class="px-0">
+    Fuente: Bolsa de Comercio de Santiago, Desarrollado por: <a href="https://www.finmarkets.cl/"><img src="https://scotiabankchile.finmarketslive.cl/images/logoFinm.gif"></a>
+</div>
+        </div>
+    </div>
+    <div class="col-12 p-0 pt-3 pb-2">
+    <div class="col-12 text-justify leyenda-footer px-0 pt-2">
+        Todos los estudios, análisis, reportes, comentarios, información, data, opiniones y noticias contenidos en este sitio, está desarrollada en base a información pública y son meramente referenciales y entregados a Ud. con el solo propósito de información general, entendiendo que la información, data, reportes, etc., que se entrega en el sitio no debe ser la única base para la toma de una apropiada decisión de inversión y que cada inversionista debe hacer su propia evaluación en función de su propia tolerancia al riesgo y estrategia de inversión, entre otras consideraciones, no cabiéndole, en consecuencia, responsabilidad alguna a Scotiabank Chile en sus decisiones de inversión. Asimismo, esta información no garantiza la ganancia de las inversiones ni protege contra eventuales pérdidas que pudieren producirse a los inversionistas que adopten sus decisiones sobre la base de la información contenida en este sitio. La información contenida en este sitio no es una solicitud ni una oferta para invertir en ninguno de los instrumentos financieros a los que se hace referencia en él. Si bien la información contenida en el sitio está obtenida de fuentes que nos parecen confiables, no podemos garantizar que sea exacta ni completa. Infórmese de las características esenciales de la inversión en estos fondos mutuos, las que se encuentran contenidas en sus reglamentos internos. La rentabilidad o ganancia obtenida en el pasado por los fondos mutuos administrados por Scotia Administradora General de Fondos Chile S. A., no garantiza que ella se repita en el futuro. Los valores de las cuotas de los fondos mutuos son variables.
+    </div>
+</div>
+</div>
+<div class="col-md-12 bg-custom-footer">
+    <div class="container">
+        <div class="col-12 texto-footer px-0">
+            Scotiabank Chile / Casa Matriz: Av. Costanera Sur 2710, Santiago de Chile / Tel: 56 (2) 692- 6000 - <a href="#" data-toggle="modal" data-target="#responsabilidades">Descargo de Responsabilidad.</a> - <a href="https://www.scotiabank.cl/include/codigo_de_conducta.pdf" target="_blank">Código de Conducta y Buenas Prácticas de Bancos e Instituciones Financieras</a> - Infórmese sobre el límite de garantía estatal a los depósitos en su banco o en <a href="https://www.cmfchile.cl">www.cmfchile.cl</a> - <a href="#" data-toggle="modal" data-target="#defensoria">Defensoría del Cliente</a> - Manejo de Información de Interés para el Mercado - Scotiabank Todos los derechos reservados - *Marca de The Bank of Nova Scotia y Scotiabank Chile. Desarrollado por FinMarkets Chile SPA, utilizando los datos y tecnología de FinMarkets Chile SPA.
+        </div>
+    </div>
+</div>
+
+<!-- Modal Hostórico Valores Cuota -->
+<div class="modal fade" id="modalito" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img src="https://scotiabankchile.finmarketslive.cl/images/logorojo.png" width="150">
+                <!--h5 class="modal-title-cmeq" id="exampleModalLabel">Modal title</h5-->
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body txt12">
+                <h5 class="text-center"><i class="fas fa-history"></i> Hist&oacute;rico valor cuota</h5>
+                <div class="text-center" id="blkHistoricoVCText"></div>
+                <div class="col-12 col-md-8 mx-auto mt-1">
+                    <div class="row">
+                        <div class="col-6 text-center text-md-left font-bold">
+                            Fecha
+                        </div>
+                        <div class="col-6 text-center text-md-right font-bold">
+                            Valor Cuota
+                        </div>
+                    </div>
+                </div>
+                <div id="blkHistoricoVC"></div>
+            </div>
+            <div class="modal-footer-cemq text-center">
+                <a href="#" target="_blank" id="lnkModalHistorico">
+                    <button type="button" class="btn btn-primary"><i class="fas fa-file-excel"></i> Exportar</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div><!-- modal -->
+
+</body>
+</html>
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-49588744-1', 'finmarketslive.cl');
+    ga('send', 'pageview');
+</script>
+
+

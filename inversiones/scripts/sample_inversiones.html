@@ -1,0 +1,1216 @@
+Title: Live Content
+
+Description: Fetched live
+
+Source: https://scotiabankchile.finmarketslive.cl/www/inversiones.html
+
+---
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://scotiabankchile.finmarketslive.cl/images/favicon.png">
+    <link rel="stylesheet" type="text/css" href="https://scotiabankchile.finmarketslive.cl/css/v2/bootstrap/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="https://scotiabankchile.finmarketslive.cl/css/v2/bootstrap/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" type="text/css" href="https://scotiabankchile.finmarketslive.cl/css/v2/estilos.css?op=e1e8eddea8ba808c029b1fb6c341e537">
+    <link rel="stylesheet" type="text/css" href="https://scotiabankchile.finmarketslive.cl/css/v2/simplebar/simplebar.css">
+    <link rel="stylesheet" type="text/css" href="https://scotiabankchile.finmarketslive.cl/css/facss/all.css">
+    <link rel="stylesheet" type="text/css" href="https://scotiabankchile.finmarketslive.cl/css/fuente/gotham.otf">
+    <title>Scotiabank Chile - Inversiones</title>
+
+    <script type="text/javascript" language="javascript" src="https://scotiabankchile.finmarketslive.cl/js/v2/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://scotiabankchile.finmarketslive.cl/js/v2/popper.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://scotiabankchile.finmarketslive.cl/js/v2/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://scotiabankchile.finmarketslive.cl/js/v2/bootstrap/Moment.js"></script>
+    <script type="text/javascript" language="javascript" src="https://scotiabankchile.finmarketslive.cl/js/v2/bootstrap/locale/es.js"></script>
+    <script type="text/javascript" language="javascript" src="https://scotiabankchile.finmarketslive.cl/js/v2/bootstrap/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://scotiabankchile.finmarketslive.cl/js/v2/bootstrap/bootstrap3-typeahead.js"></script>
+    <script src="https://scotiabankchile.finmarketslive.cl/js/v2/simplebar/simplebar.js" type="text/javascript" defer></script>
+    <script type="text/javascript" language="javascript" src="https://scotiabankchile.finmarketslive.cl/js/functions.js"></script>
+    <script src="https://scotiabankchile.finmarketslive.cl/js/amcharts/amcharts.js?k=35441" type="text/javascript" defer></script>
+    <script src="https://scotiabankchile.finmarketslive.cl/js/amcharts/serial.js?k=35441" type="text/javascript" defer></script>
+
+        <script src="https://scotiabankchile.finmarketslive.cl/js/tripleChart.js?k=070620183" type="text/javascript" defer></script>
+    <script src="https://scotiabankchile.finmarketslive.cl/js/functionTripleChart.js" type="text/javascript" defer></script>
+    
+    <script type="text/javascript">
+        var rootSite = 'https://scotiabankchile.finmarketslive.cl/www/';
+        var rootSiteImg = 'https://scotiabankchile.finmarketslive.cl/images/';
+
+        //Initialisation of the JS API in the general page
+        var d = document.domain.split('.');
+        if (d.length>2) { document.domain = d[d.length-2] + '.' + d[d.length-1]; }
+    </script>
+
+    <script type="text/javascript" src="https://push.finmarkets.cl/files/push-api/1.0.0/push.js"></script><script type="text/javascript">
+if (push)
+	push.setServerProperties({"token":"eyJraWQiOiJ2MSIsInVpZCI6InNjb3RpYWJhbmtjaGlsZTo2MzIwYjRmYjFhNmU1ZDU0Iiwic2NvcGUiOiJ1c2VyIiwiZXhwIjoxNzkwNjQ4NzY5fQ.dK9fSlJCmTpi6Po2D2ORzFX4x1ogxUJRU3hK-6rKT8s","server":"push2.finmarkets.cl","port":443,"protocol":"https","gmt":-3,"environment":"live","mainChannel":"push"});
+</script>
+<script type="text/javascript">
+function DomReady() {
+	if (push){
+		push.init();
+		setTimeout(function(){
+			location.reload();
+		}, 60 * 60 * 1000);
+	}
+}
+
+if (document.addEventListener) {
+	document.addEventListener("DOMContentLoaded", DomReady, false);
+} else if (document.attachEvent) {
+	document.attachEvent("onreadystatechange", DomReady);
+}
+
+</script>
+        <script src="https://scotiabankchile.finmarketslive.cl/js/push/pushFormat.js" type="text/javascript" defer></script>
+    
+<script type="text/javascript" defer>
+var soloFondos = '';
+//Get module http address
+var Site  = "https://scotiabankchile.finmarketslive.cl/www/";
+
+//Start chart and info scripts
+function ClickNotation(idChar, idNot, nameIns, calidadIndice) {
+	changeIDChart(idChar, idNot);
+	if(!calidadIndice)
+		calidadIndice = 'RLT';
+ 	changeInfoChartMini(idChar, idNot, nameIns, calidadIndice);
+}
+
+/**
+ * Cambia información de gráfico mini
+ *
+ */
+function changeInfoChartMini(idInfo, id, name, calidadIndice) {
+  $('#ModuleInfoChart'+idInfo).fadeTo("slow", 0.4);
+  push.unsubscribeAll(document.getElementById('ModuleInfoChart'+idInfo));
+    $.ajax({
+        type: "POST",
+        url: "https://scotiabankchile.finmarketslive.cl/www/infoChart/infoMini.php",
+        data: ({ID_NOTATION: id, NAME: name, CONT: idInfo, CALIDAD: calidadIndice}), //para escapar & en nombre
+        success: function(txt) {
+            var validate = txt.indexOf('class=green');
+            if(validate == -1)
+                setColorLine(0,idInfo);
+            else
+                setColorLine(1,idInfo);
+            $('#ModuleInfoChart'+idInfo).html(txt);
+            push.subscribeObj(document.getElementById('ModuleInfoChart'+idInfo));
+            $('#ModuleInfoChart'+idInfo).fadeTo("slow", 1);
+        }
+    })
+}
+
+//Abre ventana de noticias
+function newsClickTitulo(titulo, contenido, fuente){
+
+    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+    /* your code here */
+
+        $('#noticiamodal').html(
+            '<div class="modal-content bg-modal-content">\
+                <div class="modal-header titulo-noticia" id="titulo">\
+                    Noticias\
+                    <button type="button" class="close" data-dismiss="modal"><i class="fas fa-times"></i></button>\
+                </div>\
+                <div class="modal-body">\
+                    <div class="col-12 contenido-noticia">\
+                        <p class="bold-font"> ' + titulo + '</p>\
+                        <p>' + contenido + '</p>\
+                        <p>Fuente: ' + fuente + '</p>\
+                    </div>\
+                </div>\
+                <div class="modal-footer">\
+                    <button type="button" class="btn btn-blanco" data-dismiss="modal">Cerrar</button>\
+                </div>\
+            </div>'
+        );
+
+        $('#noticia-modal').modal();
+
+    }else{
+        $('#noticia').animate({
+            width: "340px",
+            padding: "5px 16px"
+        }, {duration: 500,
+        complete: function() {
+
+            $('#noticia').html('<div class="salir" onclick="cerrar();"><i class="fas fa-times"></i></div> \
+            <div class="titulo-modal-flotante">' + titulo + '</div> \
+            <div class="contenido-modal-flotante">' + contenido + '</div> \
+            <div class="fuente-modal-flotante">Fuente: ' + fuente + '</div>');
+
+            // $('#noticia').html('<img onclick="cerrar();" src="https://scotiabankchile.finmarketslive.cl/images/close_icon.gif"></img><h2>'+titulo+'</h2><p>'+contenido+'<br/><br/>Fuente: <i>'+fuente+'</i></p>');
+        }});
+    }
+}
+
+function cerrar() {
+	$('#noticia').html('');
+	$('#noticia').animate({width: "0px", padding: "0px"}, {duration: 300});
+}
+</script>
+
+</head>
+<body>
+    <div class="col-12 header-custom d-none d-sm-block">
+        <div class="container">
+            <div class="row px-2">
+                <div class="col-6 col-md-3 order-1 order-md-1 py-2 px-0"><img src="https://scotiabankchile.finmarketslive.cl/images/logo-sb.svg" height="25"></div>
+                <div class="col-12 col-md-7 text-right estilo-custom order-3 order-md-2">
+                    <div class="contenedor-menu">
+                        <div class="al-menu">
+                            <div class="fecha">Lunes 28 de Septiembre del 2026</div>
+                            <div class="tab-custom"><a class="active" href="https://scotiabankchile.finmarketslive.cl/www/inversiones.html">Mercados</a></div>
+                            <!--div class="tab-custom"><a class="" href="https://scotiabankchile.finmarketslive.cl/www/v2/fondosmutuos-home.html">Fondos Mutuos</a></div-->
+                            <div class="tab-custom"><a class="" href="https://scotiabankchile.finmarketslive.cl/www/corredora.html">Acciones</a></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-2 text-right order-2 order-md-3 py-2 px-0 pfin"><span style="font-weight:bold">Portal</span>Financiero</div>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-menu-responsive d-sm-none">
+        <div class="col-12 text-center portal-fuente"><span style="font-weight:bold">Portal</span>Financiero</div>
+      <a class="navbar-brand" href="#"><img src="https://scotiabankchile.finmarketslive.cl/images/logo.png"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="icono-toggle"><i class="fas fa-bars"></i></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="active-menu" href="https://scotiabankchile.finmarketslive.cl/www/inversiones.html">Mercados</a>
+          </li>
+          <!--li class="nav-item">
+            <a class="" href="https://scotiabankchile.finmarketslive.cl/www/v2/fondosmutuos-home.html">Fondos Mutuos</a>
+          </li-->
+          <li class="nav-item">
+            <a class="" href="https://scotiabankchile.finmarketslive.cl/www/corredora.html">Acciones</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="modal" id="responsabilidades">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header modal-title">
+        Descargo de Responsabilidades
+        <button type="button" class="close" data-dismiss="modal"><i class="fas fa-times"></i></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="col-12 px-0 fuente-normal">
+            <p class="bold-font">
+                Notificación
+            </p>
+            <p>
+                SÍRVASE LEER CUIDADOSAMENTE LOS PRESENTES TÉRMINOS Y CONDICIONES.
+            </p>
+            <p>
+                EL ACCESO A ESTE SITIO Y A CUALQUIER PÁGINA DEL MISMO IMPORTA ACEPTACIÓN DE ESTOS TÉRMINOS Y CONDICIONES Y LO OBLIGA A CUMPLIR Y RESPETAR LAS MISMAS.
+            </p>
+            <p>
+                EN CASO DE QUE USTED NO ESTÉ DE ACUERDO CON LOS SOGUIENTES TÉRMINOS Y CONDICIONES, NO ACCEDA A ESTE SITIO O CUALQUIER PÁGINA DEL MISMO.
+            </p>
+            <p>
+                <span class="bold-font">1.-</span> La información, materiales, textos, gráficos, conexiones y otros que figuran en el presente sitio se suministran de la manera en que se encuentran y como están disponibles. Asimismo, los términos, condiciones y descripciones que aparecen están sujetos a cambio. No todos los productos y servicios se encuentran disponibles en todas las áreas geográficas. El otorgamiento de los productos y servicios ofrecidos en este sitio está sujeto a la determinación y aceptación final de Scotiabank Chile.
+            </p>
+            <p>
+                <span class="bold-font">2.-</span> Scotiabank Chile y sus filiales se esfuerzan por asegurar en todo momento la exactitud de esta información, pero no otorgan garantía alguna sobre la exactitud, adecuación o integridad de la información y materiales de este sitio ni asumen responsabilidad alguna por las discrepancias que pudieren encontrarse entre la versión electrónica de los documentos que aquí se presentan y su impresa, la cual se mantiene como versión oficial de los mismos.
+            </p>
+            <p>
+                <span class="bold-font">3.-</span> Scotiabank Chile y sus filiales no serán responsables en caso alguno del daño que pudiere ocasionarse por el uso, imposibilidad de uso, falla en el rendimiento, error, omisión, interrupción, defecto, demora en la operación o transmisión, virus o falla de sistema o línea de este sitio. Asimismo, los enlaces y vínculos no implican responsabilidad alguna para el Banco y sus filiales ni aprobación por parte de éstos respecto de la información contenida en los mismos; los enlaces e hiperconexiones con otros medios de Internet son a su propio riesgo; Scotiabank Chile y sus filiales no investigan, no verifican, no controlan ni respaldan el contenido, exactitud, legalidad y opiniones expresadas en otras conexiones suministradas por estos medios.
+            </p>
+            <p>
+                <span class="bold-font">4.-</span> La totalidad de la información que se presenta a Scotiabank Chile y a sus filiales será considerada para todos los efectos legales de propiedad de Scotiabank Chile y éste podrá utilizar con cualquier fin toda idea, concepto, conocimiento o técnica incluidas en la información que proporcione un visitante a través de este sitio. Scotiabank Chile no estará sujeto a obligación alguna en cuanto a la confidencialidad de la información presentada, salvo acuerdo en contrario entre el Banco y sus clientes y las exigencias legales que rigen actualmente al respecto y las que se incorporen en el futuro.
+            </p>
+            <p>
+                <span class="bold-font">5.-</span> Los derechos de propiedad intelectual de estas páginas, de las pantallas que muestran estas páginas, de la información y material que aparecen en las mismas y de su disposición pertenecen a Scotiabank Chile, salvo que se indique lo contrario.
+            </p>
+            <p>
+                <span class="bold-font">6.-</span> El logo de Scotiabank Chile, sus filiales y Scotiabank son marcas registradas.
+            </p>
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+    <div class="modal" id="defensoria">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header modal-title">
+        Defensoría Cliente
+        <button type="button" class="close" data-dismiss="modal"><i class="fas fa-times"></i></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="col-12 fuente-normal">
+            <p class="bold-font">¿Qué es el sistema de Defensoría del Cliente?</p>
+            <p>Nuestro Banco, junto a la Asociación de Bancos e Instituciones Financieras (ABIF), ha desarrollado la figura del Defensor del Cliente, mediante la cual usted puede solicitar un pronunciamiento sobre algún problema que haya tenido con nuestro banco, y cuya respuesta no sea de su entera satisfacción.</p>
+            <p>No obstante, esta figura supone una serie de requisitos previos sobre los que le invitamos a informarse aquí.</p>
+            <p>Si usted decide utilizar esta alternativa, cuenta además con la posibilidad de hacer un <a href="http://www.defensoriadelclientedeabif.cl/Sitio/Revisar.aspx">Seguimiento al Estado de su Reclamo</a>, accediendo a la página de la Asociación de Bancos e Instituciones Financieras.</p>
+            <p>Ante cualquier duda o inquietud llámenos al 600 6 700 500</p>
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="container bg-blanco">
+    <div class="col-12 mapa px-0 d-none d-sm-block">
+        <div class="chart" id="blkMapChart" style="height:295px;">
+            <div id="chartMap" style="height: 290px; width: 98%;"></div>
+
+<script type="text/javascript" language="javascript" src="https://scotiabankchile.finmarketslive.cl/js/ammap/ammap.js"></script>
+<script type="text/javascript" language="javascript" src="https://scotiabankchile.finmarketslive.cl/js/ammap/maps/js/worldLow.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+	var mapData = [{"id":"CL","color":"#FF0000","title":" ","cumtomData":" ","description":"<div class=\"point\" style=\"width:200px;\"><table style=\"width:100%;\"><tr id=\"Edom:5676347091699,i:3969,q:1,c:mapFilter\"><td width=\"40%\" style=\"font-weight:normal;height:10px;font-size:9px;\">IPSA<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;\" data-bind=\"text: price\" align=\"right\" id=\"map_3969_precio\">11.137,23<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;color:#FF0000\" data-bind=\"text:performance_pct, style:{color:color, background:background}\" id=\"map_3969_pct\">-1,06%<\/td><\/tr><tr id=\"Edom:5169594339073,i:3970,q:1,c:mapFilter\"><td width=\"40%\" style=\"font-weight:normal;height:10px;font-size:9px;\">IGPA<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;\" data-bind=\"text: price\" align=\"right\" id=\"map_3970_precio\">56.156,79<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;color:#FF0000\" data-bind=\"text:performance_pct, style:{color:color, background:background}\" id=\"map_3970_pct\">-1,03%<\/td><\/tr><\/table><\/div>","idInstrument":"3969","pintaMapa":"3969","IdsInstruments":"3969|3970"},{"id":"MX","color":"#FF0000","title":" ","cumtomData":" ","description":"<div class=\"point\" style=\"width:200px;\"><table style=\"width:100%;\"><tr id=\"Edom:6768641055624,i:48804,q:2,c:mapFilter\"><td width=\"40%\" style=\"font-weight:normal;height:10px;font-size:9px;\">IPC, MEXICO<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;\" data-bind=\"text: price\" align=\"right\" id=\"map_48804_precio\">64.944,41<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;color:#FF0000\" data-bind=\"text:performance_pct, style:{color:color, background:background}\" id=\"map_48804_pct\">-0,07%<\/td><\/tr><\/table><\/div>","idInstrument":"48804","pintaMapa":"48804","IdsInstruments":"48804"},{"id":"AR","color":"#FF0000","title":" ","cumtomData":" ","description":"<div class=\"point\" style=\"width:200px;\"><table style=\"width:100%;\"><tr id=\"Edom:4005674585376,i:123,q:2,c:mapFilter\"><td width=\"40%\" style=\"font-weight:normal;height:10px;font-size:9px;\">MERVAL<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;\" data-bind=\"text: price\" align=\"right\" id=\"map_123_precio\">2.798.924,68<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;color:#FF0000\" data-bind=\"text:performance_pct, style:{color:color, background:background}\" id=\"map_123_pct\">-3,28%<\/td><\/tr><\/table><\/div>","idInstrument":"123","pintaMapa":"123","IdsInstruments":"123"},{"id":"US","color":"#FF0000","title":" ","cumtomData":" ","description":"<div class=\"point\" style=\"width:200px;\"><table style=\"width:100%;\"><tr id=\"tmpm_3823028716815\"><td width=\"40%\" style=\"font-weight:normal;height:10px;font-size:9px;\">NASDAQ 100<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;\" data-bind=\"text: price\" align=\"right\" id=\"map_696_precio\">30.276,81<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;color:#FF0000\" data-bind=\"text:performance_pct, style:{color:color, background:background}\" id=\"map_696_pct\">-1,08%<\/td><\/tr><tr id=\"Edom:4807883890464,i:699,q:2,c:mapFilter\"><td width=\"40%\" style=\"font-weight:normal;height:10px;font-size:9px;\">S&P 500<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;\" data-bind=\"text: price\" align=\"right\" id=\"map_699_precio\">7.683,69<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;color:#FF0000\" data-bind=\"text:performance_pct, style:{color:color, background:background}\" id=\"map_699_pct\">-0,77%<\/td><\/tr><tr id=\"Edom:4059393959021,i:698,q:2,c:mapFilter\"><td width=\"40%\" style=\"font-weight:normal;height:10px;font-size:9px;\">S&P 100<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;\" data-bind=\"text: price\" align=\"right\" id=\"map_698_precio\">3.836,54<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;color:#FF0000\" data-bind=\"text:performance_pct, style:{color:color, background:background}\" id=\"map_698_pct\">-0,82%<\/td><\/tr><\/table><\/div>","idInstrument":"696","pintaMapa":"696","IdsInstruments":"696|699|698"},{"id":"ES","color":"#FF0000","title":" ","cumtomData":" ","description":"<div class=\"point\" style=\"width:200px;\"><table style=\"width:100%;\"><tr id=\"Edom:5978966223398,i:707,q:1,c:mapFilter\"><td width=\"40%\" style=\"font-weight:normal;height:10px;font-size:9px;\">IBEX 35<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;\" data-bind=\"text: price\" align=\"right\" id=\"map_707_precio\">19.600,30<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;color:#FF0000\" data-bind=\"text:performance_pct, style:{color:color, background:background}\" id=\"map_707_pct\">-0,51%<\/td><\/tr><\/table><\/div>","idInstrument":"707","pintaMapa":"707","IdsInstruments":"707"},{"id":"FR","color":"#009900","title":" ","cumtomData":" ","description":"<div class=\"point\" style=\"width:200px;\"><table style=\"width:100%;\"><tr id=\"Edom:6068498511850,i:709,q:1,c:mapFilter\"><td width=\"40%\" style=\"font-weight:normal;height:10px;font-size:9px;\">CAC 40<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;\" data-bind=\"text: price\" align=\"right\" id=\"map_709_precio\">8.078,48<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;color:#009900\" data-bind=\"text:performance_pct, style:{color:color, background:background}\" id=\"map_709_pct\">+0,01%<\/td><\/tr><\/table><\/div>","idInstrument":"709","pintaMapa":"709","IdsInstruments":"709"},{"id":"PT","color":"#009900","title":" ","cumtomData":" ","description":"<div class=\"point\" style=\"width:200px;\"><table style=\"width:100%;\"><tr id=\"Edom:3357460817588,i:713,q:1,c:mapFilter\"><td width=\"40%\" style=\"font-weight:normal;height:10px;font-size:9px;\">PSI 20<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;\" data-bind=\"text: price\" align=\"right\" id=\"map_713_precio\">9.712,35<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;color:#009900\" data-bind=\"text:performance_pct, style:{color:color, background:background}\" id=\"map_713_pct\">+0,08%<\/td><\/tr><\/table><\/div>","idInstrument":"713","pintaMapa":"713","IdsInstruments":"713"},{"id":"NL","color":"#009900","title":" ","cumtomData":" ","description":"<div class=\"point\" style=\"width:200px;\"><table style=\"width:100%;\"><tr id=\"Edom:6682690010616,i:708,q:1,c:mapFilter\"><td width=\"40%\" style=\"font-weight:normal;height:10px;font-size:9px;\">AEX<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;\" data-bind=\"text: price\" align=\"right\" id=\"map_708_precio\">1.116,12<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;color:#009900\" data-bind=\"text:performance_pct, style:{color:color, background:background}\" id=\"map_708_pct\">+0,36%<\/td><\/tr><\/table><\/div>","idInstrument":"708","pintaMapa":"708","IdsInstruments":"708"},{"id":"BE","color":"#FF0000","title":" ","cumtomData":" ","description":"<div class=\"point\" style=\"width:200px;\"><table style=\"width:100%;\"><tr id=\"Edom:3857050987138,i:712,q:1,c:mapFilter\"><td width=\"40%\" style=\"font-weight:normal;height:10px;font-size:9px;\">BEL 20<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;\" data-bind=\"text: price\" align=\"right\" id=\"map_712_precio\">5.685,37<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;color:#FF0000\" data-bind=\"text:performance_pct, style:{color:color, background:background}\" id=\"map_712_pct\">-0,33%<\/td><\/tr><\/table><\/div>","idInstrument":"712","pintaMapa":"712","IdsInstruments":"712"},{"id":"CN","color":"#009900","title":" ","cumtomData":" ","description":"<div class=\"point\" style=\"width:200px;\"><table style=\"width:100%;\"><tr id=\"Edom:3635010911776,i:706,q:1,c:mapFilter\"><td width=\"40%\" style=\"font-weight:normal;height:10px;font-size:9px;\">HANG SENG<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;\" data-bind=\"text: price\" align=\"right\" id=\"map_706_precio\">24.642,51<\/td><td width=\"30%\" style=\"font-weight:normal;text-align:right;height:10px;font-size:9px;color:#009900\" data-bind=\"text:performance_pct, style:{color:color, background:background}\" id=\"map_706_pct\">+0,54%<\/td><\/tr><\/table><\/div>","idInstrument":"706","pintaMapa":"706","IdsInstruments":"706"}];
+	var oldValues = {"3969":{"color":"#FF0000","country":"CL"},"3970":{"color":"#FF0000","country":"CL"},"48804":{"color":"#FF0000","country":"MX"},"123":{"color":"#FF0000","country":"AR"},"696":{"color":"#FF0000","country":"US"},"699":{"color":"#FF0000","country":"US"},"698":{"color":"#FF0000","country":"US"},"707":{"color":"#FF0000","country":"ES"},"709":{"color":"#009900","country":"FR"},"713":{"color":"#009900","country":"PT"},"708":{"color":"#009900","country":"NL"},"712":{"color":"#FF0000","country":"BE"},"706":{"color":"#009900","country":"CN"}};
+
+	function updateColorsMap(_id, _color){
+		var dp = map.dataProvider.areas;
+		var found = false;
+		for (var i = 0, len = dp.length; i < len; i++){
+			if (dp[i].id == _id){
+				dp[i].color = _color;
+				found = true;
+			}
+		}
+		if (found){
+			map.dataProvider.areas = dp;
+			map.validateData();
+		}
+	}
+
+	function checkColorChange(_id, _pct){
+		if (oldValues[_id]){
+			var _color = 'same';
+			if (_pct > 0.0)
+				_color = "#009900";
+			else if (_pct < 0.0)
+				_color = '#FF0000';
+			if (oldValues[_id].color != _color){
+				oldValues[_id].color = _color;
+				updateColorsMap( oldValues[_id].country, _color );
+			}
+		}
+	}
+
+	var mapFilter = function (data) {
+		var cleanNotatation = data.id_notation.replace('delay','');
+		data.price = push.util.formatNum(data.price, 2, '', ',', '.');
+		checkColorChange(data.id_notation, data.performance_pct);
+		data.performance_pct = push.util.formatNum(data.performance_pct, 2, true, ',', '.') + '%';
+		return data;
+	};
+
+	var map = AmCharts.makeChart( "chartMap", {
+		"type": "map",
+		"theme": "none",
+		"projection": "miller",
+		"dragMap": false,
+		"smallMap": false,
+		"zoomOnDoubleClick": false,
+		"showDescriptionOnHover": true,
+		"showBalloonOnSelectedObject": false,
+		"zoomControl": {
+			"zoomControlEnabled": false,
+			"homeButtonEnabled": false
+		},
+		"dataProvider": {
+			"map": "worldLow",
+			"getAreasFromMap": false,
+			"areas": mapData
+		},
+		"areasSettings": {
+            "selectable": false,
+			"autoZoom": false,
+			"color": "#eeeeee",
+			"colorSolid": "#d7e1f1",
+			"selectedColor": "#d7e1f1",
+			"outlineColor": "#989393",
+			"rollOverOutlineColor": "#989393",
+			"balloonText": ""
+		}
+	});
+
+	map.addListener( "init", function() {
+		push.subscribeObj(document.getElementById('chartMap'));
+	});
+
+	map.addListener("rollOverMapObject", function (e) {
+		if (e.mapObject && e.mapObject.hasOwnProperty('description')) {
+			push.subscribeObj(document.getElementById('chartMap'));
+		}
+	});
+
+	map.addListener('rollOutMapObject',function(e){
+		if (e.mapObject && e.mapObject.hasOwnProperty('description')) {
+			$('.ammapDescriptionWindow, .amcharts-description-div').hide();
+		}
+	});
+</script>        </div>
+        <div class="modal-flotante" id="noticia">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-lg-3 py-2 px-0 order-2 order-lg-1 mt-2"> <!-- CONTENEDOR IZQUIERDO -->
+            <div class="col-12">
+                <div class="cabecera-iz">
+                    Noticias
+                </div>
+                <div class="contenido-iz px-2">
+                    <style>
+.txtNoti{cursor:pointer}
+</style>
+<ul>
+<li style="border-bottom: 1px solid #E5E5E5;"><p id="Cambios en gerencias, más contacto con afiliados y encuestas: cómo las AFP se preparan para la licitación de stock_Las administradoras previsionales tienen en la mira el concurso, ya que el primer llamado se realizará, a más tardar, en agosto de 2027 y cuya adjudicación será en diciembre de ese año._Diario Financiero" class="txtNoti">
+                Cambios en gerencias, más contacto con afiliados y encuestas: cómo las AFP se preparan para la licitación d        </p></li>
+<li style="border-bottom: 1px solid #E5E5E5;"><p id="Andes Iron cambia su estrategia y desiste de su recurso ante la Corte Suprema por Minera Dominga_La acción pone fin a las gestiones judiciales iniciadas por la empresa luego de que, en febrero de 2026, la Corte de Apelaciones de Antofagasta confirmara el rechazo al proyecto resuelto por el Comité de Ministros en 2025._Diario Financiero" class="txtNoti">
+                Andes Iron cambia su estrategia y desiste de su recurso ante la Corte Suprema por Minera Dominga        </p></li>
+<li style="border-bottom: 1px solid #E5E5E5;"><p id="EEUU revoca visas a autoridades de Perú, Colombia y Bolivia por &amp;#34;socavar gobiernos democráticos&amp;#34;_Washington tomó la decisión en contra de 17 funcionarios latinoamericanos, entre ellos jueces y fiscales, y de otras personas a las que acusó de corrupción._Diario Financiero" class="txtNoti">
+                EEUU revoca visas a autoridades de Perú, Colombia y Bolivia por &amp;#34;socavar gobiernos democráticos&amp;        </p></li>
+<li style="border-bottom: none;"><p id="Aeropuerto de Santiago sale a buscar operadores para buses directos a regiones y ya hay más de 10 interesados_De cara a marzo de 2027, la concesionaria del terminal adjudicará tres dársenas a empresas interesadas en conectar las instalaciones con ciudades recurridas ?a 300 kilómetros de distancia de la RM? como Valparaíso y Rancagua._Diario Financiero" class="txtNoti">
+                Aeropuerto de Santiago sale a buscar operadores para buses directos a regiones y ya hay más de 10 interesados        </p></li>
+</ul>
+<script type="text/javascript">
+<!--
+$(document).ready(function(){
+  $(".txtNoti").click(function(){
+			var datosNews     = $(this).attr("id");
+			datosNews         = datosNews.split("_");
+			var tituloNews    = datosNews[0];
+			var contenidoNews = datosNews[1];
+              var fuente        = datosNews[2];
+			newsClickTitulo(tituloNews, contenidoNews, fuente);
+  });
+});
+//-->
+</script>
+                </div>
+
+                <div class="cabecera-iz">
+                                        <a href="https://cdn.aglty.io/scotiabank-chile/scotiabankpdf/inversiones/monthly-inversiones.pdf" target="_blank"><i class="far fa-file-alt"></i> Informe de mercados</a>
+                </div>
+
+                <!--
+                COMENTADO 29-03-2019
+                <div class="cabecera-iz-custom mt-3">
+                    Estudios
+                </div>
+                <div class="contenido-iz">
+                    	<div id="accordion">
+			<div class="card">
+
+			<div class="card-header" id="heading3">
+				<h5 class="mb-0">
+				<button class="btn btn-link" data-toggle="collapse" data-target="#collapse3" aria-expanded="true" aria-controls="collapse3">
+					<i class="fa"></i> Proyecci&oacute;n Burs&aacute;til				</button>
+				</h5>
+			</div>
+
+            			<div id="collapse3" class="collapse show" aria-labelledby="heading3" data-parent="#accordion">
+				<div class="card-body">
+			    					<a href="http://files2.finmarketslive.cl/scotiacl/6427558667-smvpb-181214-esp.pdf" target="_blank">- Diciembre 2018</a>
+					<br>
+			    					<a href="http://files2.finmarketslive.cl/scotiacl/7068450912-pb-2018-09.pdf" target="_blank">- Septiembre 2018</a>
+					<br>
+			    				</div>
+			</div>
+            
+		</div>
+			<div class="card">
+
+			<div class="card-header" id="heading4">
+				<h5 class="mb-0">
+				<button class="btn btn-link" data-toggle="collapse" data-target="#collapse4" aria-expanded="true" aria-controls="collapse4">
+					<i class="fa"></i> Pron&oacute;stico Econ&oacute;mico Global				</button>
+				</h5>
+			</div>
+
+            			<div id="collapse4" class="collapse " aria-labelledby="heading4" data-parent="#accordion">
+				<div class="card-body">
+			    				</div>
+			</div>
+            
+		</div>
+		</div>
+                </div>
+                -->
+            </div>
+        </div>
+        <div class="col-12 col-lg-9 py-2 order-1 order-lg-2 mt-2"> <!-- CONTENEDOR DERECHO -->
+            <div class="row">
+                <div class="col-12 col-md-4">
+                    <div class="col-12" id="ModuleInfoChart0">
+		<img src="https://scotiabankchile.finmarketslive.cl/images/ui-anim_basic_16x16.gif" border="0" />
+</div>
+                    <div class="col-12 divChart1Main"> 
+	<div class="row">
+		<div class="col-12 p-0 borde-abajo mb-4">
+			<div class="col-12 px-0 ">
+				<ul class="nav nav-tabs">
+					<li class="nav-item">
+						<a id="1D_0" class="nav-link navbtn" href="javascript:void(0)">1D</a>
+					</li>
+					<li class="nav-item">
+						<a id="5D_0" class="nav-link navbtn" href="javascript:void(0)">1S</a>
+					</li>
+					<li class="nav-item">
+						<a id="1M_0" class="nav-link navbtn" href="javascript:void(0)">1M</a>
+					</li>
+					<li class="nav-item">
+					<a id="3M_0" class="nav-link navbtn" href="javascript:void(0)">3M</a>
+					</li>
+					<li class="nav-item">
+						<a id="1Y_0" class="nav-link navbtn active" href="javascript:void(0)">1A</a>
+					</li>
+				</ul>
+			</div>
+			<div class="col-12 px-0" id="divChart1" style="width:100%; height:140px; background-color:#FFFFFF;">
+			</div>
+		</div>
+	</div>
+</div>
+                    <script type="text/javascript">
+<!--
+$(document).ready(function(){
+	$(".indices").click(function (e){
+	  var datosIndices = $(this).attr("id");
+	  datosIndices     = datosIndices.split("_");
+	  var idIndices    = datosIndices[0];
+	  var nameIndice  = datosIndices[1];
+	  var calidadIndice  = datosIndices[2];
+	  ClickNotation(0,idIndices,nameIndice,calidadIndice);
+	});
+});
+
+/**
+* Filter for Price
+*/
+formatNum = function(object,subscription,value,row){
+	if (object.isValid()){
+	  return formato_numero(object.getRawValue("PRICE"),2);
+	}
+};
+
+/*getCountry = function(idNot){
+	switch (idNot) {
+		case "10717659": return "ar_Merval_Argentina"; break;    				//Argentina
+		case "324977": return "us_DJI_United Estates"; break;						//USA
+		case "293654": return "us_S&amp;P_United Estates"; break;				//USA
+		case "9246240": return "ca_S&amp;P/TSX_Canada"; break;					//Canada
+		case "324913": return "jp_Nikkei_Japon"; break;									//Japón
+		//case "16440923": return "cn_Shanghai_China"; break;						//China
+	  case "17242077": return "cl_IPSA_Chile"; break;                 //Chile
+	  case "325080": return "cl_IGPA_Chile"; break;                   //Chile
+	  case "1335248": return "br_Bovespa_Brasil"; break;              //Brasil
+	  case "10583965": return "mx_IPC Mexico_Mexico"; break;          //Mexico
+	  case "325104": return "us_Nasdaq 100_United Estates"; break;    //USA
+	  case "324985": return "us_Nasdaq Com_United Estates"; break;    //USA
+	  case "324911": return "es_IBEX_España"; break;                  //España
+	  case "324965": return "fr_CAC40_Francia"; break;                //Francia
+	  case "324727": return "pt_PSI20_Portugal"; break;               //Portugal
+	  case "293666": return "be_BEL_Belgica"; break;                  //Belgica
+	  case "324912": return "nl_AEX_Holanda"; break;                  //Holanda
+	  case "324933": return "cn_HSI_China"; break;                  	//China
+	  default: return false;
+	}
+};*/
+//-->
+</script>
+<div class="col-12 px-0 mb-3 mb-md-0">
+	<div class="col-12">
+		<div class="row">
+			<div class="col-12 px-0 text-center bg-custom-border font-indicadores">
+				Indices
+			</div>
+			<div class="col-12 px-0 py-2">
+				<table class="table-striped">
+					<thead>
+					<tr>
+						<th class="tabla-nombre">Nombre</th>
+						<th class="tabla-puntos">Puntos</th>
+						<th class="tabla-var">Var %</th>
+					</tr>
+					</thead>
+					<tbody class="font-gris">
+																<tr id="Edom:4343,i:3970,q:1,c:pushFilter">
+											<td class="con-nombre">
+							<span id="3970_IGPA_1" class="ins indices">
+								IGPA							</span>
+						</td>
+						<td class="con-valor">
+							<span data-bind="text: price">
+        					56.156,79        					</span>
+						</td>
+						<td class="con-var">
+							<span class="nemo red" data-bind="text: performance_pct, style: {color: color, background: background}">
+          						-1,03%          					</span>
+						</td>
+					</tr>
+																<tr id="Edom:8442,i:3969,q:1,c:pushFilter">
+											<td class="con-nombre">
+							<span id="3969_IPSA_1" class="ins indices">
+								IPSA							</span>
+						</td>
+						<td class="con-valor">
+							<span data-bind="text: price">
+        					11.137,23        					</span>
+						</td>
+						<td class="con-var">
+							<span class="nemo red" data-bind="text: performance_pct, style: {color: color, background: background}">
+          						-1,06%          					</span>
+						</td>
+					</tr>
+																<tr id="Edom:12825,i:698,q:2,c:pushFilter">
+											<td class="con-nombre">
+							<span id="698_S&amp;P 100_2" class="ins indices">
+								S&AMP;P 100							</span>
+						</td>
+						<td class="con-valor">
+							<span data-bind="text: price">
+        					3.836,54        					</span>
+						</td>
+						<td class="con-var">
+							<span class="nemo red" data-bind="text: performance_pct, style: {color: color, background: background}">
+          						-0,82%          					</span>
+						</td>
+					</tr>
+																<tr id="Edom:16748,i:699,q:2,c:pushFilter">
+											<td class="con-nombre">
+							<span id="699_S&amp;P 500_2" class="ins indices">
+								S&AMP;P 500							</span>
+						</td>
+						<td class="con-valor">
+							<span data-bind="text: price">
+        					7.683,69        					</span>
+						</td>
+						<td class="con-var">
+							<span class="nemo red" data-bind="text: performance_pct, style: {color: color, background: background}">
+          						-0,77%          					</span>
+						</td>
+					</tr>
+																<tr>
+											<td class="con-nombre">
+							<span id="696_Nasdaq 100_3" class="ins indices">
+								NASDAQ 100							</span>
+						</td>
+						<td class="con-valor">
+							<span data-bind="text: price">
+        					30.276,81        					</span>
+						</td>
+						<td class="con-var">
+							<span class="nemo red" data-bind="text: performance_pct, style: {color: color, background: background}">
+          						-1,08%          					</span>
+						</td>
+					</tr>
+																<tr id="">
+											<td class="con-nombre">
+							<span id="697_NASDAQ COMP._3" class="ins indices">
+								NASDAQ COMP.							</span>
+						</td>
+						<td class="con-valor">
+							<span data-bind="text: price">
+        					26.820,38        					</span>
+						</td>
+						<td class="con-var">
+							<span class="nemo red" data-bind="text: performance_pct, style: {color: color, background: background}">
+          						-0,92%          					</span>
+						</td>
+					</tr>
+																<tr id="">
+											<td class="con-nombre">
+							<span id="709_CAC 40_3" class="ins indices">
+								CAC 40							</span>
+						</td>
+						<td class="con-valor">
+							<span data-bind="text: price">
+        					8.078,48        					</span>
+						</td>
+						<td class="con-var">
+							<span class="nemo green" data-bind="text: performance_pct, style: {color: color, background: background}">
+          						+0,01%          					</span>
+						</td>
+					</tr>
+																<tr id="">
+											<td class="con-nombre">
+							<span id="713_PSI 20_3" class="ins indices">
+								PSI 20							</span>
+						</td>
+						<td class="con-valor">
+							<span data-bind="text: price">
+        					9.712,35        					</span>
+						</td>
+						<td class="con-var">
+							<span class="nemo green" data-bind="text: performance_pct, style: {color: color, background: background}">
+          						+0,08%          					</span>
+						</td>
+					</tr>
+																<tr id="">
+											<td class="con-nombre">
+							<span id="712_BEL_3" class="ins indices">
+								BEL							</span>
+						</td>
+						<td class="con-valor">
+							<span data-bind="text: price">
+        					5.685,37        					</span>
+						</td>
+						<td class="con-var">
+							<span class="nemo red" data-bind="text: performance_pct, style: {color: color, background: background}">
+          						-0,33%          					</span>
+						</td>
+					</tr>
+																<tr id="">
+											<td class="con-nombre">
+							<span id="708_AEX_3" class="ins indices">
+								AEX							</span>
+						</td>
+						<td class="con-valor">
+							<span data-bind="text: price">
+        					1.116,12        					</span>
+						</td>
+						<td class="con-var">
+							<span class="nemo green" data-bind="text: performance_pct, style: {color: color, background: background}">
+          						+0,36%          					</span>
+						</td>
+					</tr>
+																<tr id="">
+											<td class="con-nombre">
+							<span id="706_Hang Seng HSI_3" class="ins indices">
+								HANG SENG HSI							</span>
+						</td>
+						<td class="con-valor">
+							<span data-bind="text: price">
+        					24.642,51        					</span>
+						</td>
+						<td class="con-var">
+							<span class="nemo green" data-bind="text: performance_pct, style: {color: color, background: background}">
+          						+0,54%          					</span>
+						</td>
+					</tr>
+															</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="col-12" id="ModuleInfoChart1">
+		<img src="https://scotiabankchile.finmarketslive.cl/images/ui-anim_basic_16x16.gif" border="0" />
+</div>
+                    <div class="col-12 divChart2Main"> 
+	<div class="row">
+		<div class="col-12 p-0 borde-abajo mb-4">
+			<div class="col-12 px-0 ">
+				<ul class="nav nav-tabs">
+					<li class="nav-item">
+						<a id="1D_1" class="nav-link navbtn" href="javascript:void(0)">1D</a>
+					</li>
+					<li class="nav-item">
+						<a id="5D_1" class="nav-link navbtn" href="javascript:void(0)">1S</a>
+					</li>
+					<li class="nav-item">
+						<a id="1M_1" class="nav-link navbtn" href="javascript:void(0)">1M</a>
+					</li>
+					<li class="nav-item">
+					<a id="3M_1" class="nav-link navbtn" href="javascript:void(0)">3M</a>
+					</li>
+					<li class="nav-item">
+						<a id="1Y_1" class="nav-link navbtn active" href="javascript:void(0)">1A</a>
+					</li>
+				</ul>
+			</div>
+			<div class="col-12 px-0" id="divChart2" style="width:100%; height:140px; background-color:#FFFFFF;">
+			</div>
+		</div>
+	</div>
+</div>
+                    <script type="text/javascript">
+<!--
+$(document).ready(function(){
+	$(".currencyName").click(function (){
+	  var datosCurrency = $(this).attr("id");
+	  datosCurrency     = datosCurrency.split("_");
+	  var idCurrency    = datosCurrency[0];
+	  var nameCurrency  = datosCurrency[1];
+	  ClickNotation(1, idCurrency, nameCurrency);
+	});
+});
+//-->
+</script>
+<div class="col-12 px-0 mb-3 mb-md-0">
+	<div class="col-12">
+		<div class="row">
+			<div class="col-12 px-0 text-center bg-custom-border font-indicadores">
+				Indicadores
+			</div>
+			<div class="col-12 px-0 py-2">
+				<table class="table-striped">
+					<thead>
+					<tr>
+						<th class="tabla-nombre">Nombre</th>
+						<th class="tabla-puntos">Puntos</th>
+						<th class="tabla-var">Var %</th>
+					</tr>
+					</thead>
+					<tbody class="font-gris">
+											<tr id="Edom:50784,i:231,q:1,c:pushFilter">
+							<td class="con-nombre">
+								<span id="231_Observado" class="ins currencyName">
+									OBSERVADO								</span>
+							</td>
+							<td class="con-valor">
+								<span data-bind="text: price" class="off">
+									964,1000								</span>
+							</td>
+							<td class="con-var">
+								<span class="red" data-bind="text: performance_pct, style: {color: color, background: background}">
+									-0,17%								</span>
+							</td>
+						</tr>
+											<tr id="Edom:56849,i:210,q:1,c:pushFilter">
+							<td class="con-nombre">
+								<span id="210_UF" class="ins currencyName">
+									UF								</span>
+							</td>
+							<td class="con-valor">
+								<span data-bind="text: price" class="off">
+									41.040,8200								</span>
+							</td>
+							<td class="con-var">
+								<span class="green" data-bind="text: performance_pct, style: {color: color, background: background}">
+									+0,02%								</span>
+							</td>
+						</tr>
+											<tr id="Edom:57974,i:772,q:1,c:pushFilter">
+							<td class="con-nombre">
+								<span id="772_UTM" class="ins currencyName">
+									UTM								</span>
+							</td>
+							<td class="con-valor">
+								<span data-bind="text: price" class="off">
+									71.721,0000								</span>
+							</td>
+							<td class="con-var">
+								<span class="green" data-bind="text: performance_pct, style: {color: color, background: background}">
+									+0,10%								</span>
+							</td>
+						</tr>
+											<tr id="Edom:61245,i:13994,q:1,c:pushFilter">
+							<td class="con-nombre">
+								<span id="13994_IPC" class="ins currencyName">
+									IPC								</span>
+							</td>
+							<td class="con-valor">
+								<span data-bind="text: price" class="off">
+									108,5000								</span>
+							</td>
+							<td class="con-var">
+								<span class="green" data-bind="text: performance_pct, style: {color: color, background: background}">
+									+0,60%								</span>
+							</td>
+						</tr>
+											<tr id="Edom:71328,i:62032,q:1,c:pushFilter">
+							<td class="con-nombre">
+								<span id="62032_DEP $ 1 MES" class="ins currencyName">
+									DEP $ 1 MES								</span>
+							</td>
+							<td class="con-valor">
+								<span data-bind="text: price" class="off">
+									0,2400								</span>
+							</td>
+							<td class="con-var">
+								<span class="green" data-bind="text: performance_pct, style: {color: color, background: background}">
+									+4,35%								</span>
+							</td>
+						</tr>
+											<tr id="Edom:69887,i:62035,q:1,c:pushFilter">
+							<td class="con-nombre">
+								<span id="62035_DEP $ 3 MES" class="ins currencyName">
+									DEP $ 3 MES								</span>
+							</td>
+							<td class="con-valor">
+								<span data-bind="text: price" class="off">
+									0,3883								</span>
+							</td>
+							<td class="con-var">
+								<span class="green" data-bind="text: performance_pct, style: {color: color, background: background}">
+									+0,00%								</span>
+							</td>
+						</tr>
+											<tr id="Edom:80982,i:62038,q:1,c:pushFilter">
+							<td class="con-nombre">
+								<span id="62038_DEP $ 6 MES" class="ins currencyName">
+									DEP $ 6 MES								</span>
+							</td>
+							<td class="con-valor">
+								<span data-bind="text: price" class="off">
+									0,3600								</span>
+							</td>
+							<td class="con-var">
+								<span class="off" data-bind="text: performance_pct, style: {color: color, background: background}">
+									0,00%								</span>
+							</td>
+						</tr>
+											<tr id="Edom:76741,i:62041,q:1,c:pushFilter">
+							<td class="con-nombre">
+								<span id="62041_DEP $ 1 AÑO" class="ins currencyName">
+									DEP $ 1 AÑO								</span>
+							</td>
+							<td class="con-valor">
+								<span data-bind="text: price" class="off">
+									5,0400								</span>
+							</td>
+							<td class="con-var">
+								<span class="green" data-bind="text: performance_pct, style: {color: color, background: background}">
+									+0,20%								</span>
+							</td>
+						</tr>
+											<tr id="Edom:88720,i:62044,q:1,c:pushFilter">
+							<td class="con-nombre">
+								<span id="62044_DEP UF 1 AÑO" class="ins currencyName">
+									DEP UF 1 AÑO								</span>
+							</td>
+							<td class="con-valor">
+								<span data-bind="text: price" class="off">
+									1,2100								</span>
+							</td>
+							<td class="con-var">
+								<span class="red" data-bind="text: performance_pct, style: {color: color, background: background}">
+									-3,20%								</span>
+							</td>
+						</tr>
+										</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="col-12" id="ModuleInfoChart2">
+		<img src="https://scotiabankchile.finmarketslive.cl/images/ui-anim_basic_16x16.gif" border="0" />
+</div>
+                    <div class="col-12 divChart3Main"> 
+	<div class="row">
+		<div class="col-12 p-0 borde-abajo mb-4">
+			<div class="col-12 px-0 ">
+				<ul class="nav nav-tabs">
+					<li class="nav-item">
+						<a id="1D_2" class="nav-link navbtn" href="javascript:void(0)">1D</a>
+					</li>
+					<li class="nav-item">
+						<a id="5D_2" class="nav-link navbtn" href="javascript:void(0)">1S</a>
+					</li>
+					<li class="nav-item">
+						<a id="1M_2" class="nav-link navbtn" href="javascript:void(0)">1M</a>
+					</li>
+					<li class="nav-item">
+					<a id="3M_2" class="nav-link navbtn" href="javascript:void(0)">3M</a>
+					</li>
+					<li class="nav-item">
+						<a id="1Y_2" class="nav-link navbtn active" href="javascript:void(0)">1A</a>
+					</li>
+				</ul>
+			</div>
+			<div class="col-12 px-0" id="divChart3" style="width:100%; height:140px; background-color:#FFFFFF;">
+			</div>
+		</div>
+	</div>
+</div>
+                    <script type="text/javascript">
+<!--
+$(document).ready(function(f){
+	$(".commmoditiesName").click(function (){
+		  var datosCommmodities = $(this).attr("id");
+		  datosCommmodities     = datosCommmodities.split("_");
+		  var idCommmodities    = datosCommmodities[0];
+		  var nameCommmodities  = datosCommmodities[1];
+		  ClickNotation(2, idCommmodities, nameCommmodities);
+	});
+});
+//-->
+</script>
+<div class="col-12 px-0">
+	<div class="col-12">
+		<div class="row">
+			<div class="col-12 px-0 text-center bg-custom-border font-indicadores">
+				Commodities
+			</div>
+			<div class="col-12 px-0 py-2">
+				<table class="table-striped">
+					<thead>
+					<tr>
+						<th class="tabla-nombre">Nombre</th>
+						<th class="tabla-puntos">Puntos</th>
+						<th class="tabla-var">Var %</th>
+					</tr>
+					</thead>
+					<tbody class="font-gris">
+										<tr id="Edom:68880,i:984,q:1,c:pushFilter">
+						<td class="con-nombre">
+							<span id="984_Cobre a Futuro" class="ins commmoditiesName">
+							Cobre a Futuro							</span>
+						</td>
+						<td class="con-valor">
+							<span data-bind="text: price">
+								6,55							</span>
+						</td>
+						<td class="con-var">
+							<span class="red" data-bind="text: performance_pct, style: {color: color, background: background}">
+								-0,39%							</span>
+						</td>
+					</tr>
+										<tr id="Edom:77000,i:393,q:1,c:pushFilter">
+						<td class="con-nombre">
+							<span id="393_Cobre Cash" class="ins commmoditiesName">
+							Cobre Cash							</span>
+						</td>
+						<td class="con-valor">
+							<span data-bind="text: price">
+								6,5973							</span>
+						</td>
+						<td class="con-var">
+							<span class="red" data-bind="text: performance_pct, style: {color: color, background: background}">
+								-1,33%							</span>
+						</td>
+					</tr>
+										<tr id="Edom:79166,i:982,q:1,c:pushFilter">
+						<td class="con-nombre">
+							<span id="982_Crude Oil" class="ins commmoditiesName">
+							Crude Oil							</span>
+						</td>
+						<td class="con-valor">
+							<span data-bind="text: price">
+								93,28							</span>
+						</td>
+						<td class="con-var">
+							<span class="green" data-bind="text: performance_pct, style: {color: color, background: background}">
+								+0,91%							</span>
+						</td>
+					</tr>
+										<tr id="Edom:80496,i:980,q:1,c:pushFilter">
+						<td class="con-nombre">
+							<span id="980_Oro" class="ins commmoditiesName">
+							Oro							</span>
+						</td>
+						<td class="con-valor">
+							<span data-bind="text: price">
+								4.127,95							</span>
+						</td>
+						<td class="con-var">
+							<span class="green" data-bind="text: performance_pct, style: {color: color, background: background}">
+								+0,01%							</span>
+						</td>
+					</tr>
+										<tr id="Edom:80625,i:981,q:1,c:pushFilter">
+						<td class="con-nombre">
+							<span id="981_Plata" class="ins commmoditiesName">
+							Plata							</span>
+						</td>
+						<td class="con-valor">
+							<span data-bind="text: price">
+								60,68							</span>
+						</td>
+						<td class="con-var">
+							<span class="red" data-bind="text: performance_pct, style: {color: color, background: background}">
+								-0,21%							</span>
+						</td>
+					</tr>
+										<tr id="Edom:86268,i:213,q:1,c:pushFilter">
+						<td class="con-nombre">
+							<span id="213_Celulosa NBSK" class="ins commmoditiesName">
+							Celulosa NBSK							</span>
+						</td>
+						<td class="con-valor">
+							<span data-bind="text: price">
+								1.205,04							</span>
+						</td>
+						<td class="con-var">
+							<span class="off" data-bind="text: performance_pct, style: {color: color, background: background}">
+								0,00%							</span>
+						</td>
+					</tr>
+										<tr id="Edom:87264,i:740,q:1,c:pushFilter">
+						<td class="con-nombre">
+							<span id="740_Gas natural" class="ins commmoditiesName">
+							Gas natural							</span>
+						</td>
+						<td class="con-valor">
+							<span data-bind="text: price">
+								3,00							</span>
+						</td>
+						<td class="con-var">
+							<span class="red" data-bind="text: performance_pct, style: {color: color, background: background}">
+								-1,96%							</span>
+						</td>
+					</tr>
+										<tr id="Edom:88368,i:214,q:1,c:pushFilter">
+						<td class="con-nombre">
+							<span id="214_Harina de pescado" class="ins commmoditiesName">
+							Harina de pescado							</span>
+						</td>
+						<td class="con-valor">
+							<span data-bind="text: price">
+								2.105,00							</span>
+						</td>
+						<td class="con-var">
+							<span class="red" data-bind="text: performance_pct, style: {color: color, background: background}">
+								-1,86%							</span>
+						</td>
+					</tr>
+										<tr id="Edom:100775,i:222,q:1,c:pushFilter">
+						<td class="con-nombre">
+							<span id="222_Azucar" class="ins commmoditiesName">
+							Azucar							</span>
+						</td>
+						<td class="con-valor">
+							<span data-bind="text: price">
+								504,00							</span>
+						</td>
+						<td class="con-var">
+							<span class="red" data-bind="text: performance_pct, style: {color: color, background: background}">
+								-0,92%							</span>
+						</td>
+					</tr>
+										</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+                </div>
+                <!-- INDICADORES -->
+                <div class="col-12 py-3">
+                    <div class="row">
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#noticia-modal">Open Modal</button> -->
+    <div class="row mt-3 fuente-footer text-gris">
+        <div class="col-12 text-center text-md-right">
+            <div class="px-0">
+    Fuente: Bolsa de Comercio de Santiago, Desarrollado por: <a href="https://www.finmarkets.cl/"><img src="https://scotiabankchile.finmarketslive.cl/images/logoFinm.gif"></a>
+</div>
+        </div>
+    </div><!--row-->
+    <div class="col-12 p-0 pt-3 pb-2">
+    <div class="col-12 text-justify leyenda-footer px-0 pt-2">
+        Todos los estudios, análisis, reportes, comentarios, información, data, opiniones y noticias contenidos en este sitio, está desarrollada en base a información pública y son meramente referenciales y entregados a Ud. con el solo propósito de información general, entendiendo que la información, data, reportes, etc., que se entrega en el sitio no debe ser la única base para la toma de una apropiada decisión de inversión y que cada inversionista debe hacer su propia evaluación en función de su propia tolerancia al riesgo y estrategia de inversión, entre otras consideraciones, no cabiéndole, en consecuencia, responsabilidad alguna a Scotiabank Chile en sus decisiones de inversión. Asimismo, esta información no garantiza la ganancia de las inversiones ni protege contra eventuales pérdidas que pudieren producirse a los inversionistas que adopten sus decisiones sobre la base de la información contenida en este sitio. La información contenida en este sitio no es una solicitud ni una oferta para invertir en ninguno de los instrumentos financieros a los que se hace referencia en él. Si bien la información contenida en el sitio está obtenida de fuentes que nos parecen confiables, no podemos garantizar que sea exacta ni completa. Infórmese de las características esenciales de la inversión en estos fondos mutuos, las que se encuentran contenidas en sus reglamentos internos. La rentabilidad o ganancia obtenida en el pasado por los fondos mutuos administrados por Scotia Administradora General de Fondos Chile S. A., no garantiza que ella se repita en el futuro. Los valores de las cuotas de los fondos mutuos son variables.
+    </div>
+</div>
+</div>
+
+<div class="col-md-12 bg-custom-footer">
+    <div class="container">
+        <div class="col-12 texto-footer px-0">
+            Scotiabank Chile / Casa Matriz: Av. Costanera Sur 2710, Santiago de Chile / Tel: 56 (2) 692- 6000 - <a href="#" data-toggle="modal" data-target="#responsabilidades">Descargo de Responsabilidad.</a> - <a href="https://www.scotiabank.cl/include/codigo_de_conducta.pdf" target="_blank">Código de Conducta y Buenas Prácticas de Bancos e Instituciones Financieras</a> - Infórmese sobre el límite de garantía estatal a los depósitos en su banco o en <a href="https://www.cmfchile.cl">www.cmfchile.cl</a> - <a href="#" data-toggle="modal" data-target="#defensoria">Defensoría del Cliente</a> - Manejo de Información de Interés para el Mercado - Scotiabank Todos los derechos reservados - *Marca de The Bank of Nova Scotia y Scotiabank Chile. Desarrollado por FinMarkets Chile SPA, utilizando los datos y tecnología de FinMarkets Chile SPA.
+        </div>
+    </div>
+</div>
+
+<!-- Modal Hostórico Valores Cuota -->
+<div class="modal fade" id="modalito" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img src="https://scotiabankchile.finmarketslive.cl/images/logorojo.png" width="150">
+                <!--h5 class="modal-title-cmeq" id="exampleModalLabel">Modal title</h5-->
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body txt12">
+                <h5 class="text-center"><i class="fas fa-history"></i> Hist&oacute;rico valor cuota</h5>
+                <div class="text-center" id="blkHistoricoVCText"></div>
+                <div class="col-12 col-md-8 mx-auto mt-1">
+                    <div class="row">
+                        <div class="col-6 text-center text-md-left font-bold">
+                            Fecha
+                        </div>
+                        <div class="col-6 text-center text-md-right font-bold">
+                            Valor Cuota
+                        </div>
+                    </div>
+                </div>
+                <div id="blkHistoricoVC"></div>
+            </div>
+            <div class="modal-footer-cemq text-center">
+                <a href="#" target="_blank" id="lnkModalHistorico">
+                    <button type="button" class="btn btn-primary"><i class="fas fa-file-excel"></i> Exportar</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div><!-- modal -->
+
+</body>
+</html>
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-49588744-1', 'finmarketslive.cl');
+    ga('send', 'pageview');
+</script>
+<div class="modal" id="noticia-modal">
+  <div class="modal-dialog" id="noticiamodal">
+    <div class="modal-content bg-modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header titulo-noticia" id="titulo">
+        Noticias
+        <button type="button" class="close" data-dismiss="modal"><i class="fas fa-times"></i></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="col-12 contenido-noticia">
+            <p class="bold-font">Titulo de la noticia</p>
+            <p>Cuerpo de la noticia</p>
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-blanco" data-dismiss="modal">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
