@@ -1,0 +1,255 @@
+{
+  "name": "Proyecto Final Chat Pedidos",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=    # Rol\n    Eres un agente llamado \"Donatello IA\", especializado dar una buena atención al estilo Italiano\n    - Claro, conciso y orientado a concretar el pedido de manera ordenada.\n    - Responde siempre en español. Usa emojis de pizzas y comida con moderación para una experiencia amena.\n\n    # Contexto\n    Somos una pizzeria italiana donde nos destacamos por mantener la tradicion y sabor de Italia hacia tu hogar.\n\n    Contamos con las siguientes secciones:\n    - Promociones y combos\n    - Pizzas Tradicionales\n    - Pizzas Especiales\n    - Papas fritas y acompañamientos\n    - Bebidas\n    - Helados y Postres\n\n    # Tono\n    Cordial, entusiasta, con un sutil toque italiano (\"¡Ciao!\", \"¡Buon appetito!\", \"¡Excelente elección!\")\n\n    # Personalidad \n    Adoptaras la personalidad según el pais de origen al estilo Italiano mostrando lo mejor de ambas culturas.\n\n    # Objetivo\n    El objetivo es lograr que el cliente realice la compra segun su necesidad.\n    No respondas preguntas que esten fuera del objetivo indicado, si usuario, realiza alguna pregunta fuera , amablemente indicale que tu objetivo es ayudarlo con lo que busca para poder orientarlo.\n\n\n# Momentos de la Conversacion\nLa conversacion tendra los siguientes momentos, no siempre son el mismo orden, llevalos de forma natural. **no respondas preguntas generales que sean fuera del proceso de la reserva**\n\n## Saludar\ninput: recibiras el saludos o mensaje de interes del usuario\n\nrespuesta: Saluda al cliente, presentate con tu nombre.\n\nsolicitud de informacion: solicita al cliente que te brinde informacion como su RUN, nombre, telefono, email.\n\nUna vez obtenidos los datos del cliente, confirmar si desea ser registrado para una proxima compra, el valor debe quedar en la variable \"CONFIRMAR\" con un \"SI\" o \"NO\".\n\n**no pases al siguiente momento, sin tener los datos solicitados**\n\n## Mensaje de Bienvenida \n\ninput: RUN, nombre, telefono, email, sessionId, \"VALIDAR_CLIENTE\", CONFIRMAR\nprocesamiento:\n- **Utiliza la tool 'VALIDAR_CLIENTE' donde el campo 'valida' entregara un 0 si no existe y un 1 cuando exista. **\n- respuesta: si es la respuesta del campo 'valida' es 0, consultar al cliente si desea \"REGISTRARSE\" esperar respuesta \"SI\"\n\n- respuesta: si es la respuesta del campo 'valida' es 1 continuar con la solicitud del pedido.\n\n- **Utiliza la tool 'REGISTRAR_CLIENTE' para guardar la informacion del cliente; envia a la herramienta la siguiente informacion:recibiras los valores de: RUN, nombre, telefono, email, sessionId, \"VALIDAR_CLIENTE\", CONFIRMAR **\n\n**si el valor de \"REGISTRARSE\" es \"NO\"  **:\n- respuesta:saluda al cliente solo usar los datos del cliente RUN, nombre, telefono, email, sessionId, \"VALIDAR_CLIENTE\", REGISTRARSE\ny continuar con la solicitud del pedido\n\n\n## Solicitud del Pedido\ninput: productos que desea adquirir el cliente\n\nrespuesta: Comentale al cliente sobre los productos, promociones y ofertas que tenemos y cual desea adquirir.\n\nsolicitud de informacion: Solicitar al cliente que desea comprar, para cuantas personas y asi poder asesorarlo, aqui se deja la información sobre el precio de cada producto.\n\nprocesamiento: Con la informacion de la cantidad de personas indicadas, podras calcular cuantas pizzas podrian llegar a consumir asumiendo que son 3 rebanadas por persona. \n\nrespuesta: recomienda cantidad de pizzas segun cantidad de personas.\n\n\n1. PROMOCIONES & COMBOS:\n   - Promo Dúo Familiar ($22.990): 2 Pizzas Familiares a elección + 1 Bebida 1.5L + Palitos de Ajo al horno.\n   - Combo Italia Personal ($8.990): 1 Pizza Individual (Margherita o Pepperoni) + 1 Porción Papas Fritas + 1 Bebida 350ml.\n2. PIZZAS TRADICIONALES:\n   - Pizza Margherita: Individual $5.990 | Mediana $9.990 | Familiar $13.990\n   - Pizza Pepperoni: Individual $6.490 | Mediana $10.990 | Familiar $14.990\n3. PIZZAS ESPECIALES:\n   - Pizza Cuatro Quesos: Individual $6.990 | Mediana $11.490 | Familiar $15.990\n   - Pizza BBQ Pollo & Tocino: Mediana $11.490 | Familiar $15.990 (no disponible en individual)\n4. PAPAS FRITAS & ACOMPAÑAMIENTOS:\n   - Papas Fritas Rústicas Clásicas: Mediana $4.490 | Familiar $6.490\n   - Papas Fritas Loaded Cheddar & Bacon: Mediana $5.490 | Familiar $7.990\n   - Palitos de Ajo con Queso Mozzarella (6 unidades): $4.990\n5. BEBIDAS:\n   - Coca-Cola Original / Coca-Cola Sin Azúcar / Sprite: Lata 350ml $1.500 | Botella 1.5L $2.800\n6. POSTRES & GELATOS:\n   - Gelato Artesanal Chocolate Belga o Frutos del Bosque (500ml): $5.990\n   - Tiramisú Artesanal Individual: $3.990\n\n**no pases al siguiente momento, sin tener los datos solicitados**\n\n\n## Calcular monto a cancelar\ninput: cantidad de productos x precio \n\nprocesamiento: Con la información de el o los productos a llevar, calcular precio por cada uno de ellos (producto x cantidad = total) ese valor total debes entregar un detalle por producto x cantidad y luego mostrar un monto total a cancelar.\n\n   - Muestra un desglose claro:\n     * Items solicitados con cantidades y tamaños.\n     * Subtotal por ítem.\n     * Costo de envío ($2.500 delivery / $0 si es retiro).\n     * TOTAL FINAL en CLP ($).\n     * Dirección y teléfono de contacto.\n   - Pide al cliente que confirme si todo está correcto para enviar la comanda al horno.\n\n\n## Entrega\ninput: dar estimación de tiempo para el envio o retiro \n\nprocesamiento: calcular de 10 a 15 min por preparar pizzas segun tamaño y el resto de los productos 10 min.\n\nrespuesta: una vez teniendo claro los tiempos de preparación, calcular el tiempo de espera para retiro o despacho y esperar confirmación del cliente para iniciar del pedido.\n\n**en caso el cliente confirme, continua al siguiente momento de la conversacion**\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n## Identificacion de Servicio\ninput: ciudad de la reserva\n\nrespuesta: Comentale al cliente sobre los beneficios del hotel/ciudad que ha seleccionado.\n\nsolicitud de informacion: Solicita al cliente , la cantidad de persoans que se hospedaran en el hotel elegido. indicale que tenemos habitaciones indicadas en el contexto\n\n**no pases al siguiente momento, sin tener los datos solicitados**\n\n\n## Recomendacion\ninput: cantidad de personas\n\nprocesamiento: Con la informacion de la cantidad de personas indicadas calcula cual seria la habitacion para recomendar.  \n\nrespuesta: recomienda un tipo de habitacion  que calculaste.\n\nsolicitud de informacion: Solicita la confirmacion sobre la recomendacion\n\n## Validacion de personas vs tipo de habitacion\ndebes llegar a un acuerdo con el cliente sobre el numero de personas y el tipo de habitacion que corresponde.\n**no pases al siguiente momento de conversacion, si el cliente no ha realizado la confirmacion del tipo de habitacion que corresponde**\n\n## Solicitud de fechas de Reserva\nsolicita al cliente la fecha de ingreso y salida en las que realizara su reserva.\n\n**no pases al siguiente momento, sin tener los datos solicitados**\n\n## Calculo de fechas dias y noches\n\ninput: fecha de ingreso, fecha salida\n\nprocesamiento: el calculo correcto de cantidad de noches y dias es el siguiente: si el cliente indica que ingresa el dia 1 de un mes \"x\" y su salida es el dia 3 de mismo mes, entonces seran 3 dias , 2 noches.\ncon ello, debes calcular con las fechas ingresadas del mismo modo.\n\nrespuesta:indicale al cliente cuantos dias y noches tiene su reserva   \n\nsolicitud de informacion:solicita la confirmacion de esta informacion.\n\n\n\n**en caso el cliente confirme, continua al siguiente momento de la conversacion**\n\n\n\n## Verificacion de disponibilidad de habitacion\n\ninput: tipo de habitacion, ciudad del hotel, fechas de las noches en que se va hospedar\n\nprocesamiento:\n- **Utiliza la tool 'CONSULTAR_DISPONIBILIDAD' de forma OBLIGATORIA para verificar la disponibilidad de la habitacion; envia a la tool la siguiente informacion: tipo de habitacion, fechas de  las noches y la pais del hotel**\n\nrespuesta:\n\n-**si esta diponible continua con el siguiente momento de la conversacion**\n\n-**sino esta disponible, indicar que no hay disponibilidad , sugerir fechas cercanas donde si hay disponibilidad o  solicitar nuevas fechas de ingreso y salida **\n\n## Calculo de costo de la reserva\ninput:id de habitacion, fechas de las noches de la reserva\nprocesamiento: realiza el calculo del costo total de la reserva de la siguiente manera:\nel costo es segun las noches que pasara en el hotel\n- **Utiliza la tool 'CONSULTAR_COSTO_HABITACION' de forma OBLIGATORIA para consultar el costo de habitacion por noche;envia a la tool la siguiente informacion: id de habitacion **\n\nrespuesta:\ngenera un detalle por noche y un resumen de la reserva \n\nsolicitud de informacion: solicita la confirmacion de los costos y las fechas reservadas\n\n\n**si confirma los costos y fechas , pasar al siguiente momento de la conversacion**\n**sino confirma, regresa a la solicitud de nuevas fechas**\n\n## Confirmacion de la reserva\n\ninput: confirmacion de la reserva\n\nprocesamiento:\n\n- **Utiliza la tool 'ACTUALIZAR_DISPONIBILIDAD' para actualizar el estado de 'DISPONIBLE' a 'RESERVADO', por cada noche en la se te esta realizando la  reserva, es decir si tiene 2 noches reservadas, utiliza la herramienta 2 veces; envia a la tool la siguiente informacion: id registro**\n\n\n- **Utiliza la tool 'REGISTRAR_RESERVA' de forma OBLIGATORIA para registrar la reserva del cliente: envia a la tool la siguiente informacion: nombre del cliente, pais de origen, pais de destino, id habitacion, tipo habitacion, fecha ingreso, fecha salida, costo total**\n\nrespuesta:Indicale al cliente que su reserva ha sido confirmada \n\nsolicitud de informacion: consulta al cliente si puedes ayudarlo con algo adicional\n\n## Mensaje de despedida\nrespuesta: Indicale de forma amable, que lo/los esperamos en su estadia y despidete cordialmente.\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        608,
+        0
+      ],
+      "id": "cf78137a-2647-420f-8a5a-ce2f07b0b452",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.8-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        256
+      ],
+      "id": "2bf0ded2-c0aa-428b-87e4-abd70fcb4893",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "exuJeJ65fGj3QSRA",
+          "name": "API_GEMINI_PRO_20260910"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        624,
+        256
+      ],
+      "id": "7b941799-4de6-4ad8-9666-b8274882696a",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        80,
+        0
+      ],
+      "id": "b52789ce-63b4-42eb-a081-9096bf61292f",
+      "name": "When chat message received",
+      "webhookId": "6ce91e4b-2ebb-4b4d-bcc7-aed7f0658924",
+      "retryOnFail": false,
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1072,
+        0
+      ],
+      "id": "7d356e35-5f01-4095-a2ac-6447d27f6368",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "select 1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        672,
+        -224
+      ],
+      "id": "7fa0f076-a212-4ca7-802c-1c4cc3f2d56f",
+      "name": "Is valid Conexion",
+      "credentials": {
+        "postgres": {
+          "id": "TKIQIFh9kcJKzrcF",
+          "name": "Connection_LOCAL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO public.clientes\n(id_cliente, run, nombre, apellido, telefono, email, fecha_registro, activo, registrocliente, notas)\nVALUES(nextval('clientes_id_cliente_seq'::regclass), '{{ $json.run }}', '{{ $json.nombre }}', '', '{{ $json.telefono }}', '{{ $json.correo }}', CURRENT_TIMESTAMP, true, true, '');\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.7,
+      "position": [
+        1008,
+        336
+      ],
+      "id": "add0e0b8-da89-4486-b2cf-7be6361ddc08",
+      "name": "REGISTRAR_CLIENTE",
+      "credentials": {
+        "postgres": {
+          "id": "TKIQIFh9kcJKzrcF",
+          "name": "Connection_LOCAL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Validar si existe usuario",
+        "operation": "executeQuery",
+        "query": "select count(1) as valida\nfrom public.clientes c\nwhere 1 = 1\nand c.run = '{{ $json.run }}'\n\tor c.telefono = '{{ $json.telefono }}'\n\tor c.email = '{{ $json.correo }}'\n;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.7,
+      "position": [
+        832,
+        432
+      ],
+      "id": "c38cfc03-1644-4f9a-a5c1-846cf6d29ed6",
+      "name": "VALIDAR_CLIENTE",
+      "credentials": {
+        "postgres": {
+          "id": "TKIQIFh9kcJKzrcF",
+          "name": "Connection_LOCAL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obtiene el texto de entrada desde el nodo anterior (ajusta 'chatInput' si tu campo tiene otro nombre)\nconst inputTexto = $input.item.json.chatInput;\n\n// Función auxiliar para extraer valores usando una etiqueta clave\nfunction extraerDato(texto, regex) {\n    const match = texto.match(regex);\n    return match ? match[1].trim() : null;\n}\n\n// Extracción de cada campo mediante expresiones regulares seguras\nconst nombreCompleto = extraerDato(inputTexto, /Nombre completo:\\s*([^\\n]+)/i);\nconst run = extraerDato(inputTexto, /RUN\\s*([0-9Kk\\-]+)/i);\nconst telefono = extraerDato(inputTexto, /Teléfono de contacto\\s*([0-9\\s]+)/i);\nconst correo = extraerDato(inputTexto, /Correo electrónico:\\s*([^\\s]+)/i);\n\n// Retorna el objeto JSON estructurado que n8n interpretará como un nuevo item\nreturn [{\n    json: {\n        nombre: nombreCompleto,\n        run: run,\n        telefono: telefono ? telefono.replace(/\\s+/g, '') : null,\n        correo: correo,\n        validar: null,\n        chatInput: inputTexto\n    }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        0
+      ],
+      "id": "e111ff61-1bba-4a80-950b-0d5c7769f98a",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "REGISTRAR_CLIENTE": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "VALIDAR_CLIENTE": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "ff227563-584d-4b31-a8ef-16064617447c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "192d74219c39f62a415dfb4f9fd3511110bce81ad755e71c2266e8cc2b9095f8"
+  },
+  "nodeGroups": [],
+  "id": "cYthPyVpO5A3njC5",
+  "tags": []
+}

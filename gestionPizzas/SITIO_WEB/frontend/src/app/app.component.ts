@@ -5,6 +5,7 @@ import { HeroComponent } from './components/hero/hero.component';
 import { ProductCardComponent } from './components/product-card/product-card.component';
 import { CartDrawerComponent } from './components/cart-drawer/cart-drawer.component';
 import { OrderSuccessModalComponent } from './components/order-success-modal/order-success-modal.component';
+import { ChatbotComponent } from './components/chatbot/chatbot.component';
 import { PizzeriaService } from './services/pizzeria.service';
 import { Producto } from './models/producto.model';
 import { Categoria } from './models/categoria.model';
@@ -19,7 +20,8 @@ import { PedidoResponse } from './models/pedido.model';
     HeroComponent,
     ProductCardComponent,
     CartDrawerComponent,
-    OrderSuccessModalComponent
+    OrderSuccessModalComponent,
+    ChatbotComponent
   ],
   template: `
     <div class="app-layout">
@@ -115,6 +117,9 @@ import { PedidoResponse } from './models/pedido.model';
         [order]="lastOrder" 
         (close)="lastOrder = null"
       ></app-order-success-modal>
+
+      <!-- Chatbot Flotante conectado a N8N -->
+      <app-chatbot></app-chatbot>
     </div>
   `,
   styles: [`
